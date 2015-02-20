@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:orientation="vertical"
+	    android:layout_weight="0.5"
+	     >
+	     
+		    <com.example.selection_test1.com.andtinder.view.CardContainer
+		        android:id="@+id/layoutview"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+		    
+		    <RelativeLayout 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        
+		        >
+		    	<View
+			        android:id="@+id/loading_background"
+			        android:layout_width="310dp"
+			        android:layout_height="500dp"
+			        android:background="@drawable/loading_border"
+			        android:visibility="gone"
+			        android:layout_margin="30dp"
+			        >
+		    	    
+		    	</View>
+		    	<ImageView 
+			        android:id="@+id/loading"
+			        android:layout_width="180dip"
+			        android:layout_height="170dp"
+			        android:layout_gravity="center"
+			        android:visibility="gone"
+			        android:layout_marginLeft="100dp"
+			        android:layout_marginRight="100dp"
+			        android:layout_marginTop="60dp"
+			        android:layout_marginBottom="50dp"
+		        /> 
+		        <TextView 
+		            android:id="@+id/looking_for_more"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Looking For New Attendees..."
+		            android:textColor="@color/whova_blue"
+		            android:layout_below="@id/loading"
+		            android:visibility="gone"
+		            android:layout_marginLeft="80dp"
+		            android:textStyle="bold"
+		            
+		            />
+		        <TextView
+		            android:id="@+id/to_discard" 
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Click Here to Browse Discards"
+		            android:layout_below="@id/looking_for_more"
+		            android:visibility="gone"
+		            android:layout_marginLeft="80dp"
+		            android:layout_marginTop="50dp"
+		            android:textColor="#B8B8B8"
+		            />
+		    </RelativeLayout>       
+        
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="40dp"
+	    android:orientation="horizontal"
+	    android:paddingBottom="5dp"
+	     >
+    
+        <Button
+	        android:id="@+id/not_interest"
+	        android:layout_height="30dp"
+	        android:layout_width="70dp"
+	        android:layout_weight="0.5"
+	        android:text="Not Interesting"
+            android:layout_margin="5dp"
+	        android:background="@drawable/not_interest_ui"
+	        android:textColor="#EA7A81"	        
+	         />
+
+        <Button
+            android:id="@+id/interest"
+            android:layout_height="30dp"
+            android:layout_width="80dp"
+            android:layout_weight="0.5"
+            android:text="Interesting"
+            android:layout_margin="5dp"
+	        android:background="@drawable/interest_ui"
+	        android:textColor="#FFFFFF"
+           	 />
+
+     </LinearLayout>
+    
+</LinearLayout>
