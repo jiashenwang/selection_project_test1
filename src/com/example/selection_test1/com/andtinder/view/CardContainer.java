@@ -116,7 +116,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
         a.recycle();
     }
 
-    public void like(){
+    public void notLike(){
 
 
         final View topCard = mTopCard;
@@ -142,17 +142,21 @@ public class CardContainer extends AdapterView<ListAdapter> {
         mTopCard = getChildAt(getChildCount() - 2);
         CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
-        if(mTopCard != null)
+        if(mTopCard != null){
             mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+            mTopCard.setVisibility(View.VISIBLE);
+            if(getChildAt(getChildCount() - 3)!=null){
+            	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
+            }
+        }
         if (cardModel.getOnCardDimissedListener() != null) {
-            cardModel.getOnCardDimissedListener().onLike();
+            cardModel.getOnCardDimissedListener().onDislike();
             likes.add(cardModel);                     
         }
 
-         
     }
     
-    public void notLike(){
+    public void like(){
     	
     	
         final View topCard = mTopCard;
@@ -178,10 +182,15 @@ public class CardContainer extends AdapterView<ListAdapter> {
         mTopCard = getChildAt(getChildCount() - 2);
         CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
-        if(mTopCard != null)
+        if(mTopCard != null){
             mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+            mTopCard.setVisibility(View.VISIBLE);
+            if(getChildAt(getChildCount() - 3)!=null){
+            	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
+            }
+        }
         if (cardModel.getOnCardDimissedListener() != null) {
-            cardModel.getOnCardDimissedListener().onDislike();
+            cardModel.getOnCardDimissedListener().onLike();
             likes.add(cardModel);                     
         }
     	
@@ -191,6 +200,12 @@ public class CardContainer extends AdapterView<ListAdapter> {
     public ListAdapter getAdapter() {
         return mListAdapter;
     }
+    
+    public void clear(){
+        if (mListAdapter != null)
+            mListAdapter.unregisterDataSetObserver(mDataSetObserver);
+    }
+    
 
     @Override
     public void setAdapter(ListAdapter adapter) {
@@ -209,7 +224,14 @@ public class CardContainer extends AdapterView<ListAdapter> {
             mTopCard = getChildAt(getChildCount() - 1);
             mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
         }
-        mNumberOfCards = getAdapter().getCount();
+        
+        // change here !!!!!!!!!!!!!!!!!!!!
+        if(getAdapter().getCount()>=2){
+            mNumberOfCards = 2;
+        }else{
+        	mNumberOfCards = getAdapter().getCount();
+        }
+
         requestLayout();
     }
 
@@ -262,7 +284,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
     }
 
     private float getDisorderedRotation() {
-        return (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS);
+       // return (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS);
+    	return (float) Math.toDegrees(0*DISORDERED_MAX_ROTATION_RADIANS);
     }
 
     @Override
@@ -388,7 +411,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 ValueAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mTopCard,
                         PropertyValuesHolder.ofFloat("translationX", 0),
                         PropertyValuesHolder.ofFloat("translationY", 0),
-                        PropertyValuesHolder.ofFloat("rotation", (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS)),
+                        //PropertyValuesHolder.ofFloat("rotation", (float) Math.toDegrees(mRandom.nextGaussian() * DISORDERED_MAX_ROTATION_RADIANS)),
+                        PropertyValuesHolder.ofFloat("rotation", (float) Math.toDegrees(0)),
                         PropertyValuesHolder.ofFloat("pivotX", mTopCard.getWidth() / 2.f),
                         PropertyValuesHolder.ofFloat("pivotY", mTopCard.getHeight() / 2.f)
                 ).setDuration(250);
@@ -532,8 +556,14 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 mTopCard = getChildAt(getChildCount() - 2);
                 CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
-                if(mTopCard != null)
+                if(mTopCard != null){
+                    mTopCard.setVisibility(View.VISIBLE);
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+                    if(getChildAt(getChildCount() - 3)!=null){
+                    	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
+                    }
+                }
+
                 if (cardModel.getOnCardDimissedListener() != null) {
                     if ( targetX > 0 ) {
                         cardModel.getOnCardDimissedListener().onDislike();
@@ -542,7 +572,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                         cardModel.getOnCardDimissedListener().onLike();
                         notLikes.add(cardModel);
                     }
-                    Log.wtf("~~~~~~~~~~~~~~~", "Like: "+likes.size()+" Not Like: "+notLikes.size());
+                    //Log.wtf("~~~~~~~~~~~~~~~", "Like: "+likes.size()+" Not Like: "+notLikes.size());
                 }
 
                 

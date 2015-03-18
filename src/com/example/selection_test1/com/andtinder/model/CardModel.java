@@ -17,7 +17,7 @@
 
 package com.example.selection_test1.com.andtinder.model;
 
-import com.example.selection_test1.Person;
+import java.util.Map;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,7 +32,7 @@ public class CardModel {
 	private Drawable cardImageDrawable;
 	private Drawable cardLikeImageDrawable;
 	private Drawable cardDislikeImageDrawable;
-	private Person PersonInfo;
+	protected Map<String, Object> mProfile;
 
     private OnCardDimissedListener mOnCardDimissedListener = null;
 
@@ -47,19 +47,11 @@ public class CardModel {
         void OnClickListener();
     } 
 
-	public CardModel() {
-		this(null, null, (Drawable)null);
+	public CardModel(Map<String, Object> map) {
+		mProfile = map;
 	}
-
-	public CardModel(Person p){
-		PersonInfo = new Person(p.getPersonId(), p.getPersonName(),
-				p.getPersonMid(), p.getPersonFields(), p.getPersonWork(),
-				p.getPersonEdu());
-	}
-	public CardModel(Person p, Drawable cardImage){
-		PersonInfo = new Person(p.getPersonId(), p.getPersonName(),
-				p.getPersonMid(), p.getPersonFields(), p.getPersonWork(),
-				p.getPersonEdu());
+	public CardModel(Map<String, Object> map, Drawable cardImage) {
+		mProfile = map;
 		this.cardImageDrawable = cardImage;
 	}
 	
@@ -75,9 +67,10 @@ public class CardModel {
 		this.cardImageDrawable = new BitmapDrawable(null, cardImage);
 	}
 	
-	public Person getPerson(){
-		return this.PersonInfo;
+	public Map<String, Object> getProfile(){
+		return mProfile;
 	}
+	
 
 	public String getTitle() {
 		return title;

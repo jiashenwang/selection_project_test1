@@ -2,9 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.selection_test1.PeopleSelection" >
 
-    
-        
-     
+    <item
+        android:id="@+id/search"
+        android:title="Search"
+        android:showAsAction="always"
+        android:actionViewClass="android.widget.SearchView" />
     <item
         android:id="@+id/interest_list"
         android:title="list"

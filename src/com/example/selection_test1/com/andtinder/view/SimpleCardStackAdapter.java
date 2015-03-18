@@ -1,16 +1,26 @@
 package com.example.selection_test1.com.andtinder.view;
 
+
+import java.util.List;
+import java.util.Map;
+
 import android.content.Context;
+import android.os.CountDownTimer;
+import android.support.v4.widget.ListViewAutoScrollHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.androidquery.AQuery;
 import com.example.selection_test1.R;
+import com.example.selection_test1.adapters.ListViewAdapter;
 import com.example.selection_test1.com.andtinder.model.CardModel;
 
 public final class SimpleCardStackAdapter extends CardStackAdapter {
@@ -27,42 +37,85 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 			assert convertView != null;
 		}
 
-		((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
-		((TextView) convertView.findViewById(R.id.title)).setText(model.getPerson().getPersonName());
-		//((TextView) convertView.findViewById(R.id.description)).setText(model.getDescription());
 		
-		String current = "";
-		String positionName = "";
-		if(model.getPerson().getPersonWork().size() == 0){
-			for(int i=0; i<model.getPerson().getPersonEdu().size(); i++){
-				if(model.getPerson().getPersonEdu().get(i).ifCurrent()){
-					current = model.getPerson().getPersonEdu().get(i).getSchoolName();
-					for(int j=0; j<model.getPerson().getPersonEdu().get(i).getMajor().size(); j++){
-						if(j==0)
-							positionName = model.getPerson().getPersonEdu().get(i).getMajor().get(j);
-						else
-							positionName = positionName + ", " + model.getPerson().getPersonEdu().get(i).getMajor().get(j);
-					}
-					break;
-				}
-			}
+		String imgUrl = getPicUrl(model);
+		if(imgUrl!=""){
+			AQuery aq = new AQuery(convertView);
+			aq.id(R.id.image).progress(R.id.image_progress_bar).image(imgUrl, false, false);
 		}else{
-			for(int i=0; i<model.getPerson().getPersonWork().size(); i++){
-				if(model.getPerson().getPersonWork().get(i).ifCurrent()){
-					current = model.getPerson().getPersonWork().get(i).getcompany();
-					positionName = model.getPerson().getPersonWork().get(i).getPosition();
-				}
-				break;
-			}
+			((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
 		}
-		((TextView) convertView.findViewById(R.id.position)).setText(current);
-		((TextView) convertView.findViewById(R.id.company)).setText(positionName);
 
-		ExpandableListView person_info = (ExpandableListView)convertView.findViewById(R.id.person_info);
-		person_info.setAdapter(new ListViewAdapter(convertView.getContext(), model.getPerson()));
-		person_info.expandGroup(0);
-		person_info.expandGroup(1);
-		person_info.expandGroup(2);
+		((TextView) convertView.findViewById(R.id.title)).setText(model.getProfile().get("name").toString());
+		((TextView) convertView.findViewById(R.id.field)).setText(getField(model));
+		((TextView) convertView.findViewById(R.id.loc)).setText(getLoc(model));
+
+		final ExpandableListView person_info = (ExpandableListView)convertView.findViewById(R.id.person_info);
+		ListViewAdapter lva = new ListViewAdapter(convertView.getContext(), model.getProfile());
+		person_info.setAdapter(lva);
+		
+		// expend all the expendable views
+		for(int i=0; i < lva.getGroupCount(); i++){
+			person_info.expandGroup(i);
+		}
+
+		
+		if(position == 0){
+			person_info.smoothScrollToPosition(person_info.getCount()-1);
+		}
+		/*
+		if(position == 0){
+
+			final long totalScrollTime = 4000;
+			final int scrollPeriod = 1;
+			final int heightToScroll = 1; 
+			person_info.post(new Runnable() {
+	            @Override
+	            public void run() {
+	                    new CountDownTimer(totalScrollTime, scrollPeriod ) {
+	                        public void onTick(long millisUntilFinished) {
+	                        	person_info.scrollBy(0, heightToScroll);
+	                        }
+	                    public void onFinish() {
+	                        //you can add code for restarting timer here
+	                    }
+	                }.start();
+	            }
+	        });
+		}*/
+
+		
 		return convertView;
 	}
+	
+	
+	private String getPicUrl(CardModel model){
+		String result =  (String) model.getProfile().get("pic");
+		if(result == null || result == ""){
+			return "";
+		}else{
+			return result;
+		}
+	}
+	private String getField(CardModel model){
+		String field = "";
+		List<String> map =  (List<String>) model.getProfile().get("field");
+		for(int i=0; i<map.size(); i++){
+			if(i==0)
+				field = map.get(i).toString();
+			else
+				field += (", "+map.get(i).toString());
+		}
+		return field;
+	}
+	private String getLoc(CardModel model){
+		String loc = "";
+		List<Map<String,Object>> map =  (List<Map<String, Object>>) model.getProfile().get("loc");
+		if(map.size()>=1){
+			loc = map.get(0).get("name").toString();
+		}
+		return loc;
+	}
+
+	
 }

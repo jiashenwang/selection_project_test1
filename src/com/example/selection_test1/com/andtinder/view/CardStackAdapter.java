@@ -62,6 +62,11 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
 				wrapper.addView(convertedCardView);
 			}
 		}
+		
+		// change here !!!!!
+		if(position !=0 &&  position !=1){
+			wrapper.setVisibility(View.GONE);
+		}
 
 		return wrapper;
 	}
@@ -76,6 +81,11 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
 		synchronized (mLock) {
 			mData.add(item);
 		}
+		notifyDataSetChanged();
+	}
+	
+	public void clear() {
+		mData.clear();
 		notifyDataSetChanged();
 	}
 

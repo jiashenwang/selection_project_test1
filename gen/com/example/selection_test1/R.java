@@ -22,9 +22,9 @@ public final class R {
         public static final int orientation=0x7f010000;
     }
     public static final class color {
-        public static final int card_bg=0x7f050000;
-        public static final int card_outline=0x7f050001;
-        public static final int whova_blue=0x7f050002;
+        public static final int card_bg=0x7f060000;
+        public static final int card_outline=0x7f060001;
+        public static final int whova_blue=0x7f060002;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -34,102 +34,119 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f060000;
-        public static final int activity_vertical_margin=0x7f060001;
+        public static final int activity_horizontal_margin=0x7f070000;
+        public static final int activity_vertical_margin=0x7f070001;
     }
     public static final class drawable {
-        public static final int bg_selector=0x7f020000;
-        public static final int border=0x7f020001;
-        public static final int border2=0x7f020002;
-        public static final int camera=0x7f020003;
-        public static final int card_bg=0x7f020004;
-        public static final int cats=0x7f020005;
-        public static final int dislike=0x7f020006;
-        public static final int heart=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int ic_like=0x7f020009;
-        public static final int interest_ui=0x7f02000a;
-        public static final int like=0x7f02000b;
-        public static final int loading=0x7f02000c;
-        public static final int loading_animation=0x7f02000d;
-        public static final int loading_border=0x7f02000e;
-        public static final int not_interest_ui=0x7f02000f;
-        public static final int p1=0x7f020010;
-        public static final int p10=0x7f020011;
-        public static final int p11=0x7f020012;
-        public static final int p12=0x7f020013;
-        public static final int p13=0x7f020014;
-        public static final int p14=0x7f020015;
-        public static final int p15=0x7f020016;
-        public static final int p16=0x7f020017;
-        public static final int p17=0x7f020018;
-        public static final int p18=0x7f020019;
-        public static final int p19=0x7f02001a;
-        public static final int p2=0x7f02001b;
-        public static final int p20=0x7f02001c;
-        public static final int p21=0x7f02001d;
-        public static final int p22=0x7f02001e;
-        public static final int p23=0x7f02001f;
-        public static final int p24=0x7f020020;
-        public static final int p25=0x7f020021;
-        public static final int p26=0x7f020022;
-        public static final int p27=0x7f020023;
-        public static final int p28=0x7f020024;
-        public static final int p29=0x7f020025;
-        public static final int p3=0x7f020026;
-        public static final int p30=0x7f020027;
-        public static final int p4=0x7f020028;
-        public static final int p5=0x7f020029;
-        public static final int p6=0x7f02002a;
-        public static final int p7=0x7f02002b;
-        public static final int p8=0x7f02002c;
-        public static final int p9=0x7f02002d;
-        public static final int people=0x7f02002e;
-        public static final int picture1=0x7f02002f;
-        public static final int picture2=0x7f020030;
-        public static final int picture3=0x7f020031;
+        public static final int arrow=0x7f020000;
+        public static final int be_interested_btn=0x7f020001;
+        public static final int bg_selector=0x7f020002;
+        public static final int border=0x7f020003;
+        public static final int border2=0x7f020004;
+        public static final int camera=0x7f020005;
+        public static final int card_bg=0x7f020006;
+        public static final int cats=0x7f020007;
+        public static final int dislike=0x7f020008;
+        public static final int heart=0x7f020009;
+        public static final int ic_launcher=0x7f02000a;
+        public static final int ic_like=0x7f02000b;
+        public static final int interest_ui=0x7f02000c;
+        public static final int like=0x7f02000d;
+        public static final int loading=0x7f02000e;
+        public static final int loading_animation=0x7f02000f;
+        public static final int loading_border=0x7f020010;
+        public static final int not_interest_ui=0x7f020011;
+        public static final int p1=0x7f020012;
+        public static final int p10=0x7f020013;
+        public static final int p11=0x7f020014;
+        public static final int p12=0x7f020015;
+        public static final int p13=0x7f020016;
+        public static final int p14=0x7f020017;
+        public static final int p15=0x7f020018;
+        public static final int p16=0x7f020019;
+        public static final int p17=0x7f02001a;
+        public static final int p18=0x7f02001b;
+        public static final int p19=0x7f02001c;
+        public static final int p2=0x7f02001d;
+        public static final int p20=0x7f02001e;
+        public static final int p21=0x7f02001f;
+        public static final int p22=0x7f020020;
+        public static final int p23=0x7f020021;
+        public static final int p24=0x7f020022;
+        public static final int p25=0x7f020023;
+        public static final int p26=0x7f020024;
+        public static final int p27=0x7f020025;
+        public static final int p28=0x7f020026;
+        public static final int p29=0x7f020027;
+        public static final int p3=0x7f020028;
+        public static final int p30=0x7f020029;
+        public static final int p4=0x7f02002a;
+        public static final int p5=0x7f02002b;
+        public static final int p6=0x7f02002c;
+        public static final int p7=0x7f02002d;
+        public static final int p8=0x7f02002e;
+        public static final int p9=0x7f02002f;
+        public static final int people=0x7f020030;
+        public static final int picture1=0x7f020031;
+        public static final int picture2=0x7f020032;
+        public static final int picture3=0x7f020033;
     }
     public static final class id {
-        public static final int action_settings=0x7f040017;
-        public static final int company=0x7f040013;
-        public static final int disordered=0x7f040001;
-        public static final int divider_title=0x7f040014;
-        public static final int global_container=0x7f04000f;
-        public static final int image=0x7f040010;
-        public static final int interest=0x7f04000a;
-        public static final int interest_list=0x7f040016;
-        public static final int layoutview=0x7f040004;
-        public static final int list=0x7f040003;
-        public static final int loading=0x7f040006;
-        public static final int loading_background=0x7f040005;
-        public static final int looking_for_more=0x7f040007;
-        public static final int name_in_list=0x7f04000c;
-        public static final int not_interest=0x7f040009;
-        public static final int ordered=0x7f040000;
-        public static final int person_info=0x7f040015;
-        public static final int pic_in_list=0x7f04000b;
-        public static final int place_in_list=0x7f04000d;
-        public static final int position=0x7f040012;
-        public static final int position_in_list=0x7f04000e;
-        public static final int select=0x7f040002;
-        public static final int title=0x7f040011;
-        public static final int to_discard=0x7f040008;
+        public static final int action_settings=0x7f050020;
+        public static final int be_interested=0x7f05000f;
+        public static final int disordered=0x7f050001;
+        public static final int divider_title=0x7f05001d;
+        public static final int field=0x7f05001a;
+        public static final int field_in_list=0x7f05000d;
+        public static final int global_container=0x7f050017;
+        public static final int group_text=0x7f050010;
+        public static final int image=0x7f050018;
+        public static final int image1=0x7f050003;
+        public static final int image_progress_bar=0x7f050009;
+        public static final int interest=0x7f050016;
+        public static final int interest_list=0x7f05001f;
+        public static final int interester_list_tutorial_message=0x7f050008;
+        public static final int layoutview=0x7f050011;
+        public static final int list=0x7f050007;
+        public static final int loading=0x7f050006;
+        public static final int loading_background=0x7f050012;
+        public static final int loc=0x7f05001b;
+        public static final int looking_for_more=0x7f050013;
+        public static final int name_in_list=0x7f05000b;
+        public static final int not_interest=0x7f050015;
+        public static final int ordered=0x7f050000;
+        public static final int org_in_list=0x7f05000c;
+        public static final int person_info=0x7f05001c;
+        public static final int pic_in_list=0x7f05000a;
+        public static final int place_in_list=0x7f05000e;
+        public static final int search=0x7f05001e;
+        public static final int select=0x7f050002;
+        public static final int text1=0x7f050004;
+        public static final int text2=0x7f050005;
+        public static final int title=0x7f050019;
+        public static final int to_discard=0x7f050014;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int interest_list=0x7f030001;
-        public static final int people_selection=0x7f030002;
-        public static final int single_row=0x7f030003;
-        public static final int std_card_inner=0x7f030004;
+        public static final int detail_one_text_item=0x7f030001;
+        public static final int detail_two_text_item=0x7f030002;
+        public static final int interest_list=0x7f030003;
+        public static final int interester_list=0x7f030004;
+        public static final int interster_single_row=0x7f030005;
+        public static final int new_detail_group_view=0x7f030006;
+        public static final int people_selection=0x7f030007;
+        public static final int personal_profile_review=0x7f030008;
+        public static final int single_row=0x7f030009;
+        public static final int std_card_inner=0x7f03000a;
     }
     public static final class menu {
-        public static final int attendees_list_menu=0x7f090000;
-        public static final int main=0x7f090001;
+        public static final int attendees_list_menu=0x7f0a0000;
+        public static final int main=0x7f0a0001;
     }
     public static final class string {
-        public static final int action_settings=0x7f070002;
-        public static final int app_name=0x7f070000;
-        public static final int hello_world=0x7f070001;
+        public static final int action_settings=0x7f080002;
+        public static final int app_name=0x7f080000;
+        public static final int hello_world=0x7f080001;
     }
     public static final class style {
         /** 
@@ -153,11 +170,14 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
+        public static final int AppTheme=0x7f090001;
+    }
+    public static final class xml {
+        public static final int searchable=0x7f040000;
     }
     public static final class styleable {
         /** Attributes that can be used with a CardContainer.
