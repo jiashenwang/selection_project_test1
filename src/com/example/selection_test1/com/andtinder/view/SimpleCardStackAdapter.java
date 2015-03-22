@@ -46,6 +46,7 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 			((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
 		}
 
+		
 		((TextView) convertView.findViewById(R.id.title)).setText(model.getProfile().get("name").toString());
 		((TextView) convertView.findViewById(R.id.field)).setText(getField(model));
 		((TextView) convertView.findViewById(R.id.loc)).setText(getLoc(model));
@@ -60,9 +61,10 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		}
 
 		
+		/*
 		if(position == 0){
 			person_info.smoothScrollToPosition(person_info.getCount()-1);
-		}
+		}*/
 		/*
 		if(position == 0){
 

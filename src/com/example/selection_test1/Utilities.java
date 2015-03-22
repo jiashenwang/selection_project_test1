@@ -45,6 +45,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -132,6 +135,7 @@ public class Utilities {
 		}
 		return null;
 	}
+	
 	/*
 	public Map<String, Object> pushUserChoice(String pid, String email, String choice) {
 		String urlString = DATA.attendees_choice_url;

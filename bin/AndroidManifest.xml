@@ -43,6 +43,13 @@
              >
         </activity>
         <activity
+            android:name="com.example.selection_test1.DiscardList"
+            android:label="Discard List"
+            android:theme="@android:style/Theme.Holo.Light"
+            android:screenOrientation="portrait"
+             >
+        </activity>
+        <activity
             android:name="com.example.selection_test1.InteresterList"
             android:label="Interester List"
             android:theme="@android:style/Theme.Holo.Light"
@@ -51,7 +58,7 @@
         </activity>
         <activity
             android:name="com.example.selection_test1.PersonalProfileReview"
-            android:label="Interester List"
+            android:label="Profile"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="portrait"
              >

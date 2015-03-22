@@ -69,7 +69,6 @@ public class PersonalProfileReview extends Activity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-    	Intent i;
 		switch(item.getItemId()){
 		case android.R.id.home:
 			onBackPressed();
@@ -84,6 +83,7 @@ public class PersonalProfileReview extends Activity {
 		el = (ExpandableListView) findViewById(R.id.person_info);
         Intent intent = getIntent();
         personInfo = (Map<String, Object>) intent.getSerializableExtra("PERSON");
+        
         
 	}
 	

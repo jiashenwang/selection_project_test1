@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
 
-    
    	<Button
         android:id="@+id/be_interested"
         android:layout_height="30dp"
@@ -15,33 +13,56 @@
         android:background="@drawable/be_interested_btn"
         android:textColor="#FFFFFF"	
         android:layout_gravity="center_horizontal" 
-        android:textSize="15sp"       
-    /> 
+        android:textSize="15sp"  
+        android:layout_centerHorizontal="true"     
+    />      
+
+
     <LinearLayout
+        android:id="@+id/card_area"
+        android:layout_below="@+id/be_interested"
 	    android:layout_width="match_parent"
-	    android:layout_height="0dp"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical"
 	    android:layout_weight="0.4"
+	    android:layout_gravity="center_horizontal"
 	     >
 	     
-		    <com.example.selection_test1.com.andtinder.view.CardContainer
-		        android:id="@+id/layoutview"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"/>
+        	<RelativeLayout
+        	    	android:id="@+id/deck_layout"
+        	  		android:layout_width="wrap_content"
+			        android:layout_height="470dp"
+			        android:visibility="gone"
+			         
+        	    >
+			    <com.example.selection_test1.com.andtinder.view.CardContainer
+			        android:id="@+id/layoutview_search"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:visibility="gone"/> 
+			    <com.example.selection_test1.com.andtinder.view.CardContainer
+			        android:id="@+id/layoutview"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        android:visibility="gone"/>    
+       	    
+        	</RelativeLayout>
+
 		    
 		    <RelativeLayout 
 		        android:layout_width="match_parent"
 		        android:layout_height="match_parent"
-		        android:layout_gravity="center"
+		        android:layout_gravity="center_horizontal"
 		        >
 		    	<View
 			        android:id="@+id/loading_background"
 			        android:layout_width="320dp"
-			        android:layout_height="500dp"
+			        android:layout_height="465dp"
+			        android:layout_margin="5dp"
+			        android:layout_marginBottom="10dp"
 			        android:background="@drawable/loading_border"
 			        android:visibility="gone"
-			        android:layout_margin="30dp"
-			       	android:layout_gravity="center_horizontal" 
+			       	android:layout_centerHorizontal="true"
 			        >
 		    	    
 		    	</View>
@@ -52,7 +73,7 @@
 			        android:visibility="gone"
 			        android:layout_marginTop="60dp"
 			        android:layout_marginBottom="50dp"
-			        android:layout_marginLeft="100dp" 
+			        android:layout_centerHorizontal="true"
 		        /> 
 		        <TextView 
 		            android:id="@+id/looking_for_more"
@@ -64,9 +85,24 @@
 		            android:visibility="gone"
 		            android:textStyle="bold"
 		            android:gravity="center" 
-		            android:layout_marginLeft="70dp"
+		            android:layout_centerHorizontal="true"
 		            
 		            />
+		        
+		        <TextView 
+		            android:id="@+id/no_more_new_attendees"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="There is no more new attendees"
+		            android:textColor="@color/whova_blue"
+		            android:layout_below="@id/loading"
+		            android:visibility="gone"
+		            android:textStyle="bold"
+		            android:gravity="center" 
+		            android:layout_centerHorizontal="true"
+		            
+		            />
+		        
 		        <TextView
 		            android:id="@+id/to_discard" 
 		            android:layout_width="wrap_content"
@@ -74,16 +110,19 @@
 		            android:text="Click Here to Browse Discards"
 		            android:layout_below="@id/looking_for_more"
 		            android:visibility="gone"
-		            android:layout_marginTop="30dp"
+		            android:layout_marginTop="40dp"
 		            android:textColor="#B8B8B8"
 		            android:layout_gravity="center_horizontal" 
-		            android:layout_marginLeft="70dp"
+		            android:layout_centerHorizontal="true"
 		            />
+		        
+
+		        
 		    </RelativeLayout>       
         
     </LinearLayout>
-    
     <LinearLayout
+        android:layout_below="@+id/card_area"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
@@ -113,7 +152,16 @@
 	        android:textColor="#FFFFFF"
            	 />
 
-
      </LinearLayout>
+     
+     <ListView 
+        android:id="@+id/auto_complete_attendees_search"
+        android:layout_marginTop="2dp"
+	    android:layout_width="300dp"
+	    android:layout_height="wrap_content"
+	    android:visibility="gone"
+	    android:background="#F8F8F8"
+	    android:layout_centerHorizontal="true"
+        />
     
-</LinearLayout>
+</RelativeLayout>

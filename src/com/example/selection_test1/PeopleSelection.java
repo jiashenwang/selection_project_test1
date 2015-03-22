@@ -18,8 +18,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+import com.example.selection_test1.adapters.ListAdapter;
 import com.example.selection_test1.com.andtinder.model.CardModel;
 import com.example.selection_test1.com.andtinder.view.CardContainer;
+import com.example.selection_test1.com.andtinder.view.CardStackAdapter;
 import com.example.selection_test1.com.andtinder.view.SimpleCardStackAdapter;
 
 import android.app.Activity;
@@ -48,11 +52,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,33 +71,30 @@ public class PeopleSelection extends Activity {
 	
 	final public int MAX_CARDS_NUM = 2;
 	final private int amountPerDeck = 4;
+	private int temp_counter = 0;
 	
+	private RelativeLayout deckLayout;
 	private CardContainer mCardContainer;
 	private Button interest, not_interest;
 	SimpleCardStackAdapter adapter;
+	SimpleCardStackAdapter adapter_search;
 	private ArrayList<CardModel> currentCards;
 	private ArrayList<CardModel> attendeesBuffer1;
 	private ArrayList<CardModel> attendeesBuffer2;
 	private ArrayList<Map<String, Object>> attendees;
+	private ArrayList<Map<String, Object>> attendees_search;
 	//private ArrayList<Map<String, Object>> interestList;
 	//private ArrayList<Map<String, Object>> notInterestList;
-	private TextView lookingForMore, toDiscard;
+	private TextView lookingForMore, toDiscard, noMoreNewAttendees;
 	private AQuery aq;
 	private ImageView loadingImg;
 	private Button interesterBtn;
 	View loadingView;
 	private List<String> searchedItems;
 	private Menu menu;
+	private ListView attendeesSearchHint;
 
-	//int counter;
 	Resources r;
-	
-	//private int totalCards;
-	//private int lastCardInPage;
-	//private int deckSize;
-	//private int currentDeckSize;
-	//private int cardsCounter;
-	//private int deckIndex;
 	
 	private boolean more;
 	// if true use buffer1 else use buffer 2
@@ -104,15 +110,6 @@ public class PeopleSelection extends Activity {
         
         // initialize all the components here
         InitializeVar();
-        //getCards();
-
-        /*
-		mCardContainer.setAdapter(adapter);
-		if(allCards.size()==0){
-			loadingMode();
-		}*/
-		
-		// the following is the onclick listener sets
         
         not_interest.setOnTouchListener(new OnTouchListener() {
 			
@@ -130,9 +127,6 @@ public class PeopleSelection extends Activity {
     		        	  mCardContainer.notLike();
     		          case MotionEvent.ACTION_CANCEL: {
   							holdButton();
-    		        	  //Button view = (Button) v;
-    		              //view.getBackground().clearColorFilter();
-    		              //view.invalidate();
     		              break;
     		          }
     	          }
@@ -157,9 +151,6 @@ public class PeopleSelection extends Activity {
     		             
     		          case MotionEvent.ACTION_CANCEL: {
   							holdButton();
-    		        	  //Button view = (Button) v;
-    		              //view.getBackground().clearColorFilter();
-    		              //view.invalidate();
     		              break;
     		          }
     	          }
@@ -194,6 +185,67 @@ public class PeopleSelection extends Activity {
     		}
 		});
         
+        toDiscard.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Intent i = new Intent(PeopleSelection.this, DiscardList.class);
+	        	  startActivity(i);
+				return true;
+			}
+        	
+        });
+        
+        attendeesSearchHint.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				// TODO Auto-generated method stub
+				attendeesSearchHint.setVisibility(View.GONE);
+				HashMap<String, Object> item = 
+						(HashMap<String, Object>) attendeesSearchHint.getItemAtPosition(position);
+				
+				// using fake data
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("email", item.get("email"));
+				params.put("event", "cse25");
+				params.put("pid", "");
+				
+				aq.ajax(DATA.single_attendee_detail, params, JSONObject.class, new AjaxCallback<JSONObject>(){
+			    	@Override  
+		            public void callback(String url, JSONObject json, AjaxStatus status) { 
+			    		try {
+			    		
+			    			Map map1 = Utilities.toMap(json);
+							Map<String, Object> map2 = (Map<String, Object>) map1.get("result");
+							Map<String, Object> map3 = (Map<String, Object>) map2.get("profile");
+							CardModel searchResult = new CardModel(map3);
+							searchResult.setOnCardDimissedListener(new CardModel.OnCardDimissedListener(){
+								@Override
+					            public void onLike() {
+									Log.wtf("!!!!!!!!!","Search card liked");
+									decisionPost(""/*email*/,""/*pid*/, true);
+								}
+								public void onDislike() {
+									Log.wtf("!!!!!!!!!","Search card not liked");
+									decisionPost(""/*email*/,""/*pid*/, false);
+								}
+							});
+						
+							adapter_search.clear();
+							adapter_search.add(searchResult);
+							CardContainer mCardContainer_search = 
+									(CardContainer) findViewById(R.id.layoutview_search);
+							mCardContainer_search.setVisibility(View.VISIBLE);
+							mCardContainer_search.setAdapter(adapter_search);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			    	}
+			    });
+			}
+        });
+        
     }
     
     @Override
@@ -222,7 +274,7 @@ public class PeopleSelection extends Activity {
 				@Override
 				public boolean onQueryTextSubmit(String query) {
 					Log.wtf("!!!!!!!!!!!!", query);
-					findAtendees(query);
+					findAttendees(query);
 					return true;
 				}
 
@@ -248,8 +300,34 @@ public class PeopleSelection extends Activity {
 		return true;
     }
 
-	private void findAtendees(String query) {
+	private void findAttendees(String query) {
 		
+		if(query.equals("")){
+			attendeesSearchHint.setVisibility(View.GONE);
+		}else{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("keyword", query);
+			
+			aq.ajax(DATA.attendees_search, params, JSONObject.class, new AjaxCallback<JSONObject>(){
+		    	@Override  
+	            public void callback(String url, JSONObject json, AjaxStatus status) { 
+		    		try {
+						Map map1 = Utilities.toMap(json);
+						Map<String, Object> map2 = (Map<String, Object>) map1.get("result");
+						List<Map<String, Object>> map3 = new ArrayList();
+						map3 = (List<Map<String, Object>>) map2.get("attendees");
+						attendeesSearchHint.setVisibility(View.VISIBLE);
+						attendeesSearchHint.setAdapter(new ListAdapter(getApplicationContext(), 
+								(ArrayList<Map<String, Object>>) map3));
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    	}
+		    });
+		}
+
 	}
     
 	protected void holdButton() {
@@ -292,10 +370,12 @@ public class PeopleSelection extends Activity {
 		not_interest.setEnabled(false);
 		
 		// for testing only
-		loadingMode();
+		//loadingMode();
+		noCardMode();
 	}
 	private void InitializeVar() {
 		// TODO Auto-generated method stub
+		deckLayout = (RelativeLayout)findViewById(R.id.deck_layout);
         mCardContainer = (CardContainer) findViewById(R.id.layoutview);
         not_interest = (Button)findViewById(R.id.not_interest);
         interest = (Button)findViewById(R.id.interest);
@@ -308,16 +388,10 @@ public class PeopleSelection extends Activity {
         loadingImg.setVisibility(View.GONE);
         lookingForMore = (TextView)findViewById(R.id.looking_for_more);
         toDiscard = (TextView)findViewById(R.id.to_discard);
+        noMoreNewAttendees = (TextView)findViewById(R.id.no_more_new_attendees);
         interesterBtn = (Button) findViewById(R.id.be_interested);
-        
-        /*
-    	totalCards = 0;
-    	lastCardInPage = 0;
-    	deckSize = 0;
-    	currentDeckSize = 0;
-    	cardsCounter = 0;
-    	deckIndex = 0;
-        */
+        attendeesSearchHint = (ListView)findViewById(R.id.auto_complete_attendees_search);
+
     	more = true;
     	bufferCounter1 = 0;
     	bufferCounter2 = 0;
@@ -328,11 +402,13 @@ public class PeopleSelection extends Activity {
         attendeesBuffer1 = new ArrayList();
         attendeesBuffer2 = new ArrayList();
         attendees = new ArrayList();
+        attendees_search = new ArrayList();
 		//interestList = new ArrayList();
 		//notInterestList = new ArrayList();
 		aq = new AQuery(this.findViewById(android.R.id.content));
         r = getResources();
 		adapter = new SimpleCardStackAdapter(this);
+		adapter_search = new SimpleCardStackAdapter(this);
 		
 		getAllAttendees gaa = new getAllAttendees(getApplicationContext(), "");
 		gaa.execute();
@@ -347,12 +423,11 @@ public class PeopleSelection extends Activity {
 		not_interest.setEnabled(false);
 		lookingForMore.setVisibility(View.VISIBLE);
 		toDiscard.setVisibility(View.VISIBLE);
+		deckLayout.setVisibility(View.GONE);
+		noMoreNewAttendees.setVisibility(View.GONE);
 		
 		not_interest.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-		//not_interest.invalidate();
-
 		interest.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-		//interest.invalidate();
 
 	}
 	private void exitLoadingMode(){
@@ -363,20 +438,31 @@ public class PeopleSelection extends Activity {
 		not_interest.setEnabled(true);
 		lookingForMore.setVisibility(View.GONE);
 		toDiscard.setVisibility(View.GONE);
+		deckLayout.setVisibility(View.VISIBLE);
+		noMoreNewAttendees.setVisibility(View.GONE);
 		
     	not_interest.getBackground().clearColorFilter();
-    	//not_interest.invalidate();
     	interest.getBackground().clearColorFilter();
-    	//interest.invalidate();
+	}
+	private void noCardMode(){
+		loadingMode();
+		lookingForMore.setVisibility(View.GONE);
+		noMoreNewAttendees.setVisibility(View.VISIBLE);
 	}
 
 	private class getAllAttendees extends AsyncTask<String, Void, Void>{
 
 		private Context context;
 		private String tempStr;
+		private boolean search = false;
 		public getAllAttendees(Context c, String s){
 			context = c;
 			tempStr = s;
+		}
+		public getAllAttendees(Context c, String s, boolean Search){
+			context = c;
+			tempStr = s;
+			search = Search;
 		}
 		
 		@Override
@@ -396,6 +482,7 @@ public class PeopleSelection extends Activity {
 			while(response==null){
 				response = Utilities.GetRequest(DATA.attendees_url);
 			}
+			
 			attendees.clear();
 			resultJson = Utilities.ToJson(response);
 			
@@ -409,19 +496,6 @@ public class PeopleSelection extends Activity {
 					for(int i=0; i<map3.size(); i++){
 						attendees.add(map3.get(i));
 					}
-
-					/*
-					// get attendees amount
-					totalCards = Integer.parseInt(map2.get("total").toString());
-					// get last cards in Deck
-					lastCardInPage = Integer.parseInt(map2.get("next").toString());
-					// get current deck size
-					deckSize = map3.size();
-					// check more
-					if(lastCardInPage < totalCards){
-						more = false;
-					}
-					*/
 					
 					
 				} catch (JSONException e) {
@@ -476,21 +550,39 @@ public class PeopleSelection extends Activity {
 	            @Override
 	            public void onLike() {
 	                Log.wtf("Swipeable Cards","I like the card: ");
+
+	                // Caution!!! current email and pid are empty, so i set them to empty string
+	                // temp.getProfile().get("email").toString()
+	                // temp.getProfile().get("pid").toString()
+	                decisionPost(""/*email*/,
+	                		""/*pid*/, 
+	                		true);
+	                		
 	                if(bufferToggle){
 	                	bufferCounter1++;
 	                	if(bufferCounter1 >= (int)amountPerDeck*0.7){
-	                		loadMore();
+	                		if(temp_counter<2)
+	                			loadMore();
 	                	}
 	                	if(more && bufferCounter1 >= amountPerDeck){
-	                		swicthToBuffer2();
+	                		if(temp_counter>=2){
+	                			noCardMode();
+	                		}else{
+		                		swicthToBuffer2();
+	                		}
 	                	}
 	                }else{
 	                	bufferCounter2++;
 	                	if(bufferCounter2 >= (int)amountPerDeck*0.7){
-	                		loadMore();
+	                		if(temp_counter<2)
+	                			loadMore();
 	                	}
 	                	if(more && bufferCounter2 >= amountPerDeck){
-	                		swicthToBuffer1();
+	                		if(temp_counter>=2){
+	                			noCardMode();
+	                		}else{
+		                		swicthToBuffer1();
+	                		}
 	                	}
 	                }
 	                if(bufferCounter1 >= amountPerDeck){
@@ -502,24 +594,42 @@ public class PeopleSelection extends Activity {
 				@Override
 	            public void onDislike() {
 	                Log.wtf("Swipeable Cards","I dislike the card");
+	                
+	                // Caution!!! current email and pid are empty, so i set them to empty string
+	                // temp.getProfile().get("email").toString()
+	                // temp.getProfile().get("pid").toString()
+	                decisionPost(""/*email*/,
+	                		""/*pid*/, 
+	                		false);
+	                
 	                if(bufferToggle){
 	                	bufferCounter1++;
 	                	if(bufferCounter1 >= (int)(amountPerDeck*0.7)){
-	                		loadMore();
+	                		if(temp_counter<2)
+	                			loadMore();
 	                	}
 	                	if(more && bufferCounter1 >= amountPerDeck){
-	                		swicthToBuffer2();
+	                		if(temp_counter>=2){
+	                			noCardMode();
+	                		}else{
+		                		swicthToBuffer2();
+	                		}
 	                	}
 	                }else{
 	                	bufferCounter2++;
 	                	if(bufferCounter2 >= (int)(amountPerDeck*0.7)){
-	                		loadMore();
+	                		if(temp_counter<2)
+	                			loadMore();
 	                	}
 	                	if(more && bufferCounter2 >= amountPerDeck){
-	                		swicthToBuffer1();
+	                		if(temp_counter>=2){
+	                			noCardMode();
+	                		}else{
+		                		swicthToBuffer1();
+	                		}
 	                	}
 	                }
-	                if(more && bufferCounter1 >= amountPerDeck){
+	                if(bufferCounter1 >= amountPerDeck){
 	                	cleanUp();
 	                }
 	            }
@@ -533,7 +643,7 @@ public class PeopleSelection extends Activity {
 		temp.execute();
 	}
 	private void swicthToBuffer2(){
-		loadingMode();
+
 		bufferToggle = false;
 		bufferCounter1 = 0;
 		attendeesBuffer1.clear();
@@ -543,9 +653,14 @@ public class PeopleSelection extends Activity {
 			exitLoadingMode();
 		}
 		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 2");
+		temp_counter++;
+
+		loadingMode();	
+		
+
 	}
 	private void swicthToBuffer1(){
-		loadingMode();
+
 		bufferToggle = true;
 		bufferCounter2 = 0;
 		attendeesBuffer2.clear();
@@ -555,6 +670,37 @@ public class PeopleSelection extends Activity {
 			exitLoadingMode();
 		}
 		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 1");
+		temp_counter++;
+
+		loadingMode();	
+		
+	}
+	
+	public void decisionPost(String email, String pid, boolean interested){
+        
+	    //do a twiiter search with a http post
+	        
+	    String url = DATA.attendees_choice_url;
+	        
+	    Map<String, Object> params = new HashMap<String, Object>();
+	    //params.put("email", email);
+	    //params.put("pid", pid);
+	    if(interested)
+	    	params.put("interested", "yes");
+	    else
+	    	params.put("interested", "no");
+	        
+	    AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>(){
+	    	@Override  
+            public void callback(String url, JSONObject json, AjaxStatus status) {  
+	    		if(!status.getMessage().toLowerCase().equals("ok")){
+	    			// todo offline system
+	    		}
+	    	}
+	    };
+	    aq.post(url, new JSONObject(params), JSONObject.class, cb);
+
+	        
 	}
 	
 	

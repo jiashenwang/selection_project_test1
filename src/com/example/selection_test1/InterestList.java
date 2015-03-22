@@ -14,11 +14,13 @@ import com.example.selection_test1.adapters.ListAdapter;
 import com.example.selection_test1.com.andtinder.model.CardModel;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.camera2.TotalCaptureResult;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -31,10 +33,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 
@@ -43,6 +47,7 @@ public class InterestList extends Activity {
 	private ImageView loadingImg;
 	private ListView lv;
 	private ArrayList<Map<String, Object>> allInterestAttendees;
+	private ArrayList<Map<String, Object>> outPutAllInterestAttendees;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +68,59 @@ public class InterestList extends Activity {
 			}
         });
     }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.interest_list_menu, menu);
+        
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+
+            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+            SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+
+            search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+            search.setOnQueryTextListener(new OnQueryTextListener() { 
+
+                @Override 
+                public boolean onQueryTextChange(String query) {
+                	
+                	onQueryTextSubmit(query);
+                    return true; 
+                }
+
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					Log.wtf("!!!!!!!!!!!!", query);
+					findAttendees(query);
+					return true;
+				}
+
+            });
+
+        }
+        
         getActionBar().setDisplayHomeAsUpEnabled(true);
         return super.onCreateOptionsMenu(menu);
     }
+    
+	private void findAttendees(String query) {
+		if(query.equals("")){
+			outPutAllInterestAttendees = (ArrayList<Map<String, Object>>) allInterestAttendees.clone();
+		}else{
+			outPutAllInterestAttendees.clear();
+			for(int i=0; i<allInterestAttendees.size(); i++){
+				if(allInterestAttendees.get(i).toString().toLowerCase().contains(query)){
+					outPutAllInterestAttendees.add(allInterestAttendees.get(i));
+				}
+			}
+		}
+		lv.setAdapter(new ListAdapter(getApplicationContext(), outPutAllInterestAttendees));
+	}
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
     	Intent i;
@@ -88,6 +141,7 @@ public class InterestList extends Activity {
         ad.start();
         
         allInterestAttendees = new ArrayList();
+        outPutAllInterestAttendees = new ArrayList();
         
         getInterestAttendees gia = new getInterestAttendees(getApplicationContext(), "");
         gia.execute();
@@ -126,7 +180,7 @@ public class InterestList extends Activity {
 			
 			// keep sending get request if the mobile is offline
 			while(response==null){
-				response = Utilities.GetRequest(DATA.attendees_url);
+				response = Utilities.GetRequest(DATA.attendees_url+"?type=interested");
 			}
 			resultJson = Utilities.ToJson(response);
 			
@@ -139,6 +193,7 @@ public class InterestList extends Activity {
 					for(int i=0; i<map3.size(); i++){
 						allInterestAttendees.add(map3.get(i));
 					}
+					outPutAllInterestAttendees = (ArrayList<Map<String, Object>>) allInterestAttendees.clone();
 					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -150,7 +205,7 @@ public class InterestList extends Activity {
 		protected void onPostExecute(Void v) {
 
 				exitLoadingMode();
-		        lv.setAdapter(new ListAdapter(getApplicationContext(), allInterestAttendees));
+		        lv.setAdapter(new ListAdapter(getApplicationContext(), outPutAllInterestAttendees));
 		}
 		
 	}

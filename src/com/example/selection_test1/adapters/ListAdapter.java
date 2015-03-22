@@ -68,7 +68,7 @@ public class ListAdapter extends BaseAdapter{
 		TextView place = (TextView)row.findViewById(R.id.place_in_list);
 		
 		 Map<String, Object> temp = profiles.get(position);
-		
+			
 		String imgUrl = getPicUrl(temp);
 		if(imgUrl!=""){
 			AQuery aq = new AQuery(row);
@@ -113,31 +113,27 @@ public class ListAdapter extends BaseAdapter{
 		}
 	}
 	private String getOrg(Map<String, Object> profile){
-		List<Map<String,Object>>map =   (List<Map<String, Object>>) profile.get("org");
-		if(map == null || map.size()<=0){
-			return "";
+		List<String>map = (List<String>) profile.get("summary");
+		if(map.size()>=1){
+			return map.get(0).toString();
 		}else{
-			return map.get(0).get("name").toString();
+			return "";
 		}
 	}
 	private String getField(Map<String, Object> profile){
-		List<String> map =  (List<String>) profile.get("field");
-		if(map!=null){
-			if(map.size()>=1){
-				return map.get(0).toString();
-			}else{
-				return "";
-			}
+		List<String>map = (List<String>) profile.get("summary");
+		if(map.size()>=2){
+			return map.get(1).toString();
 		}else{
 			return "";
 		}
 	}
 	private String getPlace(Map<String, Object> profile){
-		List<Map<String,Object>>map =   (List<Map<String, Object>>) profile.get("loc");
-		if(map == null || map.size()<=0){
-			return "";
+		List<String>map = (List<String>) profile.get("summary");
+		if(map.size()>=3){
+			return map.get(2).toString();
 		}else{
-			return map.get(0).get("name").toString();
+			return "";
 		}
 	}
 }

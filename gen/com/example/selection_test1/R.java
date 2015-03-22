@@ -92,39 +92,44 @@ public final class R {
         public static final int picture3=0x7f020033;
     }
     public static final class id {
-        public static final int action_settings=0x7f050020;
+        public static final int action_settings=0x7f050025;
+        public static final int auto_complete_attendees_search=0x7f05001b;
         public static final int be_interested=0x7f05000f;
+        public static final int card_area=0x7f050011;
+        public static final int deck_layout=0x7f050012;
         public static final int disordered=0x7f050001;
-        public static final int divider_title=0x7f05001d;
-        public static final int field=0x7f05001a;
+        public static final int divider_title=0x7f050022;
+        public static final int field=0x7f05001f;
         public static final int field_in_list=0x7f05000d;
-        public static final int global_container=0x7f050017;
+        public static final int global_container=0x7f05001c;
         public static final int group_text=0x7f050010;
-        public static final int image=0x7f050018;
+        public static final int image=0x7f05001d;
         public static final int image1=0x7f050003;
         public static final int image_progress_bar=0x7f050009;
-        public static final int interest=0x7f050016;
-        public static final int interest_list=0x7f05001f;
+        public static final int interest=0x7f05001a;
+        public static final int interest_list=0x7f050024;
         public static final int interester_list_tutorial_message=0x7f050008;
-        public static final int layoutview=0x7f050011;
+        public static final int layoutview=0x7f050014;
+        public static final int layoutview_search=0x7f050013;
         public static final int list=0x7f050007;
         public static final int loading=0x7f050006;
-        public static final int loading_background=0x7f050012;
-        public static final int loc=0x7f05001b;
-        public static final int looking_for_more=0x7f050013;
+        public static final int loading_background=0x7f050015;
+        public static final int loc=0x7f050020;
+        public static final int looking_for_more=0x7f050016;
         public static final int name_in_list=0x7f05000b;
-        public static final int not_interest=0x7f050015;
+        public static final int no_more_new_attendees=0x7f050017;
+        public static final int not_interest=0x7f050019;
         public static final int ordered=0x7f050000;
         public static final int org_in_list=0x7f05000c;
-        public static final int person_info=0x7f05001c;
+        public static final int person_info=0x7f050021;
         public static final int pic_in_list=0x7f05000a;
         public static final int place_in_list=0x7f05000e;
-        public static final int search=0x7f05001e;
+        public static final int search=0x7f050023;
         public static final int select=0x7f050002;
         public static final int text1=0x7f050004;
         public static final int text2=0x7f050005;
-        public static final int title=0x7f050019;
-        public static final int to_discard=0x7f050014;
+        public static final int title=0x7f05001e;
+        public static final int to_discard=0x7f050018;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -141,7 +146,8 @@ public final class R {
     }
     public static final class menu {
         public static final int attendees_list_menu=0x7f0a0000;
-        public static final int main=0x7f0a0001;
+        public static final int interest_list_menu=0x7f0a0001;
+        public static final int main=0x7f0a0002;
     }
     public static final class string {
         public static final int action_settings=0x7f080002;
