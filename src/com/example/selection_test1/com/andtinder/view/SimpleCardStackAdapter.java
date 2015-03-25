@@ -17,7 +17,6 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.androidquery.AQuery;
 import com.example.selection_test1.R;
 import com.example.selection_test1.adapters.ListViewAdapter;

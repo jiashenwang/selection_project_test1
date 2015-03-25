@@ -1,13 +1,7 @@
 package com.example.selection_test1;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -20,21 +14,30 @@ import org.json.JSONObject;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
+import com.example.selection_test1.R.color;
 import com.example.selection_test1.adapters.ListAdapter;
 import com.example.selection_test1.com.andtinder.model.CardModel;
 import com.example.selection_test1.com.andtinder.view.CardContainer;
 import com.example.selection_test1.com.andtinder.view.CardStackAdapter;
 import com.example.selection_test1.com.andtinder.view.SimpleCardStackAdapter;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionItemTarget;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaCodec.BufferInfo;
 import android.os.AsyncTask;
@@ -49,6 +52,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -67,7 +71,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class PeopleSelection extends Activity {
+public class PeopleSelection extends Activity implements View.OnClickListener {
 	
 	final public int MAX_CARDS_NUM = 2;
 	final private int amountPerDeck = 4;
@@ -75,6 +79,7 @@ public class PeopleSelection extends Activity {
 	
 	private RelativeLayout deckLayout;
 	private CardContainer mCardContainer;
+	private CardContainer mCardContainer_search;
 	private Button interest, not_interest;
 	SimpleCardStackAdapter adapter;
 	SimpleCardStackAdapter adapter_search;
@@ -97,19 +102,30 @@ public class PeopleSelection extends Activity {
 	Resources r;
 	
 	private boolean more;
+	private boolean noMoreAttendee;
+	private boolean noMoreSearch;
 	// if true use buffer1 else use buffer 2
 	private boolean bufferToggle;
 	private int bufferCounter1;
 	private int bufferCounter2;
-
+	private ShowcaseView sv;
+	private int tutorialPageNum;
+	
+	// coach mark targets
+	private Target tLike,tDislike,tSearch,tList;
+	
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.people_selection);
         
+
         // initialize all the components here
         InitializeVar();
+        
+        
         
         not_interest.setOnTouchListener(new OnTouchListener() {
 			
@@ -124,7 +140,10 @@ public class PeopleSelection extends Activity {
     		          }
     		          case MotionEvent.ACTION_UP:
     		              // Your action here on button click
-    		        	  mCardContainer.notLike();
+    		        	  if(noMoreSearch)
+    		        		  mCardContainer.notLike();
+    		        	  else
+    		        		  mCardContainer_search.notLike();
     		          case MotionEvent.ACTION_CANCEL: {
   							holdButton();
     		              break;
@@ -147,7 +166,10 @@ public class PeopleSelection extends Activity {
     		          }
     		          case MotionEvent.ACTION_UP:
     		              // Your action here on button click
-    		        	  mCardContainer.like();
+    		        	  if(noMoreSearch)
+    		        		  mCardContainer.like();
+    		        	  else
+    		        		  mCardContainer_search.like();
     		             
     		          case MotionEvent.ACTION_CANCEL: {
   							holdButton();
@@ -185,16 +207,15 @@ public class PeopleSelection extends Activity {
     		}
 		});
         
-        toDiscard.setOnTouchListener(new OnTouchListener(){
-
+        toDiscard.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				Intent i = new Intent(PeopleSelection.this, DiscardList.class);
-	        	  startActivity(i);
-				return true;
+	        	startActivity(i);
 			}
-        	
-        });
+		});
         
         attendeesSearchHint.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -214,7 +235,8 @@ public class PeopleSelection extends Activity {
 			    	@Override  
 		            public void callback(String url, JSONObject json, AjaxStatus status) { 
 			    		try {
-			    		
+			    			noMoreSearch = false;
+			    			exitNoCardMode();
 			    			Map map1 = Utilities.toMap(json);
 							Map<String, Object> map2 = (Map<String, Object>) map1.get("result");
 							Map<String, Object> map3 = (Map<String, Object>) map2.get("profile");
@@ -224,18 +246,27 @@ public class PeopleSelection extends Activity {
 					            public void onLike() {
 									Log.wtf("!!!!!!!!!","Search card liked");
 									decisionPost(""/*email*/,""/*pid*/, true);
+									noMoreSearch = true;
+									if(noMoreAttendee){
+										noCardMode();
+									}
 								}
 								public void onDislike() {
 									Log.wtf("!!!!!!!!!","Search card not liked");
 									decisionPost(""/*email*/,""/*pid*/, false);
+									noMoreSearch = true;
+									if(noMoreAttendee){
+										noCardMode();
+									}
 								}
 							});
-						
+						 
 							adapter_search.clear();
 							adapter_search.add(searchResult);
-							CardContainer mCardContainer_search = 
+							mCardContainer_search = 
 									(CardContainer) findViewById(R.id.layoutview_search);
 							mCardContainer_search.setVisibility(View.VISIBLE);
+							mCardContainer_search.bringToFront();
 							mCardContainer_search.setAdapter(adapter_search);
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -295,6 +326,8 @@ public class PeopleSelection extends Activity {
 			break;
 			
 		case android.R.id.home:
+			onDestroy();
+			
 			onBackPressed();
 		}
 		return true;
@@ -382,9 +415,6 @@ public class PeopleSelection extends Activity {
         loadingView = (View) findViewById(R.id.loading_background);
         loadingView.setVisibility(View.GONE);
         loadingImg = (ImageView) findViewById(R.id.loading);
-        loadingImg.setBackgroundResource(R.drawable.loading_animation);
-        AnimationDrawable ad = (AnimationDrawable) loadingImg.getBackground();
-        ad.start();
         loadingImg.setVisibility(View.GONE);
         lookingForMore = (TextView)findViewById(R.id.looking_for_more);
         toDiscard = (TextView)findViewById(R.id.to_discard);
@@ -396,6 +426,9 @@ public class PeopleSelection extends Activity {
     	bufferCounter1 = 0;
     	bufferCounter2 = 0;
     	bufferToggle = true;
+    	
+    	noMoreAttendee = true;
+    	noMoreSearch = true;
     	
     	searchedItems = new ArrayList();
     	currentCards = new ArrayList();
@@ -410,12 +443,38 @@ public class PeopleSelection extends Activity {
 		adapter = new SimpleCardStackAdapter(this);
 		adapter_search = new SimpleCardStackAdapter(this);
 		
-		getAllAttendees gaa = new getAllAttendees(getApplicationContext(), "");
+		tLike = new ViewTarget(R.id.interest, this);
+		tDislike = new ViewTarget(R.id.not_interest, this);
+		tSearch = new ActionItemTarget(this, R.id.search);
+		tList = new ActionItemTarget(this, R.id.interest_list);
+		
+		if(isFirstTime()){
+			sv = new ShowcaseView.Builder(this)
+				.setOnClickListener(this)
+				.build();
+			sv.setButtonText("NEXT");
+	        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	        lps.addRule(RelativeLayout.CENTER_IN_PARENT);
+	        lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+	        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+	        lps.setMargins(margin, margin, margin, margin);
+			sv.setButtonPosition(lps);
+			tutorialPageNum = 0;
+		}
+		
+		
+		getAllAttendees gaa = new getAllAttendees(this, "");
 		gaa.execute();
 		
 	}
 	
 	private void loadingMode(){
+        loadingImg.setBackgroundResource(R.drawable.loading_animation);
+        AnimationDrawable ad = (AnimationDrawable) loadingImg.getBackground();
+        ad.start();
+		toDiscard.setTextColor(Color.GRAY);
+		toDiscard.setTypeface(null, Typeface.NORMAL);
+		
 		mCardContainer.setVisibility(View.GONE);
 		loadingImg.setVisibility(View.VISIBLE);
 		loadingView.setVisibility(View.VISIBLE);
@@ -445,9 +504,21 @@ public class PeopleSelection extends Activity {
     	interest.getBackground().clearColorFilter();
 	}
 	private void noCardMode(){
-		loadingMode();
-		lookingForMore.setVisibility(View.GONE);
-		noMoreNewAttendees.setVisibility(View.VISIBLE);
+		noMoreAttendee = true;
+		if(noMoreSearch){
+			loadingMode();
+			
+			loadingImg.setImageResource(R.drawable.p1);
+			toDiscard.setTextColor(getResources().getColor(R.color.whova_blue));
+			toDiscard.setTypeface(null, Typeface.BOLD);
+			
+			lookingForMore.setVisibility(View.GONE);
+			noMoreNewAttendees.setVisibility(View.VISIBLE);
+		}
+	}
+	private void exitNoCardMode(){
+		exitLoadingMode();
+		noMoreNewAttendees.setVisibility(View.GONE);
 	}
 
 	private class getAllAttendees extends AsyncTask<String, Void, Void>{
@@ -496,6 +567,7 @@ public class PeopleSelection extends Activity {
 					for(int i=0; i<map3.size(); i++){
 						attendees.add(map3.get(i));
 					}
+					noMoreAttendee = false;
 					
 					
 				} catch (JSONException e) {
@@ -518,7 +590,7 @@ public class PeopleSelection extends Activity {
 						setListener(attendeesBuffer1);
 						exitLoadingMode();
 					}else{
-						
+			 			
 						for(int i=0; i<attendees.size(); i++){
 							attendeesBuffer2.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
 						}
@@ -590,7 +662,7 @@ public class PeopleSelection extends Activity {
 	                }
 	            }
 
-
+ 
 				@Override
 	            public void onDislike() {
 	                Log.wtf("Swipeable Cards","I dislike the card");
@@ -701,6 +773,75 @@ public class PeopleSelection extends Activity {
 	    aq.post(url, new JSONObject(params), JSONObject.class, cb);
 
 	        
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch(tutorialPageNum){
+			case 0:
+				sv.setShowcase(tLike, true);
+				sv.setContentTitle("Tutorial Page 1");
+				sv.setContentText("Interesting Profile? \n You Can Save This Attendee to Your Interesting List");
+			break;
+			case 1:
+				sv.setShowcase(tDislike, true);
+				sv.setContentTitle("Tutorial Page 2");
+				sv.setContentText("Not Interesting? \n You Can Discard This Attendee and You Won't See Him Again");
+			break;
+			case 2:
+				sv.setShowcase(tSearch, true);
+				sv.setContentTitle("Tutorial Page 3");
+				sv.setContentText("Search For A Specific Attendee At Any Time");
+			break;
+			case 3:
+				sv.setShowcase(tList, true);
+				sv.setContentTitle("Tutorial Page 4");
+				sv.setContentText("You Can Find All Attendees Which You Are Interested In");
+			break;
+			case 4:
+				sv.hide();
+			break;
+		}
+		tutorialPageNum++;
+	}
+	
+	private boolean isFirstTime()
+	{
+	    SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+	    boolean ranBefore = preferences.getBoolean("PeopleSelectionTutorial", false);
+	    if (!ranBefore) {
+	        // first time
+	        SharedPreferences.Editor editor = preferences.edit();
+	        editor.putBoolean("PeopleSelectionTutorial", true);
+	        editor.commit();
+	    }
+	    return !ranBefore;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		deckLayout.destroyDrawingCache();
+		mCardContainer.destroyDrawingCache();
+		interest.destroyDrawingCache();
+		not_interest.destroyDrawingCache();;
+		adapter.clear();
+		adapter_search.clear();;
+		currentCards.clear();
+		attendeesBuffer1.clear();
+		attendeesBuffer2.clear();;
+		attendees.clear();
+		attendees_search.clear();;
+		lookingForMore.destroyDrawingCache(); 
+		toDiscard.destroyDrawingCache();
+		noMoreNewAttendees.destroyDrawingCache();
+		aq.clear();
+		loadingImg.destroyDrawingCache();
+		interesterBtn.destroyDrawingCache();
+		loadingView.destroyDrawingCache();
+		attendeesSearchHint.destroyDrawingCache();;
+		sv.destroyDrawingCache();
 	}
 	
 	

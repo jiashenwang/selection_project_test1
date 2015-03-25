@@ -23,6 +23,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import com.example.selection_test1.R;
 import com.example.selection_test1.com.andtinder.model.CardModel;
@@ -154,7 +155,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
             likes.add(cardModel);                     
         }
 
-    }
+    } 
     
     public void like(){
     	
@@ -174,7 +175,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 ensureFull();
             }
 
-            @Override
+            @Override 
             public void onAnimationCancel(Animator animation) {
                 onAnimationEnd(animation);
             }
@@ -342,12 +343,17 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+    	
+    	
         if (mTopCard == null) {
             return false;
         }
         if (mGestureDetector.onTouchEvent(event)) {
             return true;
         }
+        
+    	TextView tv = (TextView)mTopCard.findViewById(R.id.decision_hint);
+    	
         //Log.d("Touch Event", MotionEvent.actionToString(event.getActionMasked()) + " ");
         final int pointerIndex;
         final float x, y;
@@ -377,7 +383,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
                 break;
             case MotionEvent.ACTION_MOVE:
-
+            	
                 pointerIndex = event.findPointerIndex(mActivePointerId);
                 x = event.getX(pointerIndex);
                 y = event.getY(pointerIndex);
@@ -385,6 +391,18 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 dx = x - mLastTouchX;
                 dy = y - mLastTouchY;
 
+                Log.wtf("!!!!!!!!", mTopCard.getX()+"");
+                if(mTopCard.getX()>=34){
+                	tv.setVisibility(View.VISIBLE);
+                	tv.setText("Not Interest");
+                	tv.setTextColor(getResources().getColor(R.color.not_interest_red));
+                }else if(mTopCard.getX()<=32){
+                	tv.setVisibility(View.VISIBLE);
+                	tv.setText("Interest");
+                	tv.setTextColor(getResources().getColor(R.color.interest_green));
+                }
+
+                
                 if (Math.abs(dx) > mTouchSlop || Math.abs(dy) > mTouchSlop) {
                     mDragging = true;
                 }
@@ -403,9 +421,11 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+
                 if (!mDragging) {
                     return true;
                 }
+                tv.setVisibility(View.GONE);
                 mDragging = false;
                 mActivePointerId = INVALID_POINTER_ID;
                 ValueAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mTopCard,

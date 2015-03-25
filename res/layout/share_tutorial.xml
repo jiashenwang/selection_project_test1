@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tutorial_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+   	
+            <ImageView 
+             	android:layout_width="wrap_content"
+		    	android:layout_height="500dp"
+		    	android:src="@drawable/img_moved_to_interesting_list"
+		    	android:gravity="center_horizontal"
+                />
+            <TextView 
+                android:id="@+id/send_to_text"
+             	android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:textColor="@color/whova_blue"
+		    	android:gravity="center_horizontal"
+		    	android:layout_marginTop="50dp"
+		    	android:text="We Have Sent Your Business Card!"
+		    	android:textStyle="bold"
+                />
+            <TextView 
+                android:id="@+id/find_in_list_text"
+             	android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:textColor="@color/whova_blue"
+		    	android:text="Find This Attendee in Your Interesting List!"
+		    	android:gravity="center_horizontal"
+		    	android:layout_marginTop="30dp"
+		    	android:layout_below="@id/send_to_text"
+		    	android:textStyle="bold"
+                />
+		    <CheckBox android:id="@+id/checkbox_tutorial"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Don't show this again"
+		        android:onClick="onCheckboxClicked"
+		        android:layout_below="@id/find_in_list_text"
+		        android:gravity="center_horizontal"
+		        android:layout_centerHorizontal="true"
+		        android:layout_marginTop="30dp"
+		        />
+		    <Button
+		        android:id="@+id/dismiss_tutorial_btn"
+		        android:layout_height="30dp"
+		        android:layout_width="150dp"
+		        android:text="Ok, Got It!"
+		       	android:layout_margin="5dp"
+		        android:background="@drawable/be_interested_btn"
+		        android:textColor="@color/white"	
+		        android:textSize="15sp"    
+		       	android:layout_gravity="end" 
+		       	android:layout_marginRight="10dp"
+		       	android:layout_centerHorizontal="true"
+		       	android:layout_marginTop="50dp"
+		       	android:layout_below="@id/checkbox_tutorial"
+	    	/>
+
+
+    
+</RelativeLayout>

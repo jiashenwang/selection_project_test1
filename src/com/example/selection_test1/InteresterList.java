@@ -10,17 +10,35 @@ import org.json.JSONObject;
 
 import com.example.selection_test1.InterestList.getInterestAttendees;
 import com.example.selection_test1.adapters.InteresterListAdapter;
-import com.example.selection_test1.adapters.ListAdapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.SearchView.OnQueryTextListener;
 
 public class InteresterList extends Activity {
 	
@@ -38,6 +56,43 @@ public class InteresterList extends Activity {
         
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.interester_list_menu, menu);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+		switch(item.getItemId()){
+		case R.id.clear:
+			new AlertDialog.Builder(this)
+		    .setTitle("Clear List")
+		    .setMessage("Are you sure you want to clear this list?")
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // continue with clear
+		        	peopInterestedInMe.clear();
+		        	lv.setAdapter(new InteresterListAdapter(getApplicationContext(), peopInterestedInMe));
+		        }
+		     })
+		    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // do nothing
+		        }
+		     })
+		    .setIcon(android.R.drawable.ic_dialog_alert)
+		     .show();
+			break;
+			
+		case android.R.id.home:
+			onDestroy();
+			onBackPressed();
+		}
+		return true;
+    }
 	private void InitializeVar() {
 	    tutorialText = (TextView)findViewById(R.id.interester_list_tutorial_message);
         lv = (ListView)findViewById(R.id.list);
@@ -48,7 +103,7 @@ public class InteresterList extends Activity {
         
         peopInterestedInMe = new ArrayList();
         
-        getInteresterAttendees gia = new getInteresterAttendees(getApplicationContext(), "");
+        getInteresterAttendees gia = new getInteresterAttendees(this, "");
         gia.execute();
 	}
 	
@@ -60,6 +115,7 @@ public class InteresterList extends Activity {
     	loadingImg.setVisibility(View.GONE);
     	lv.setVisibility(View.VISIBLE);
     }
+    
 
 	
 	class getInteresterAttendees extends AsyncTask<String, Void, Void>{
@@ -106,9 +162,20 @@ public class InteresterList extends Activity {
 			return null;
 		}
 		protected void onPostExecute(Void v) {
-				exitLoadingMode();
-		        lv.setAdapter(new InteresterListAdapter(getApplicationContext(), peopInterestedInMe));
+				exitLoadingMode(); 
+		        lv.setAdapter(new InteresterListAdapter(context, peopInterestedInMe));
+		        
 		}
 		
 	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		loadingImg.destroyDrawingCache();
+		lv.destroyDrawingCache();
+		peopInterestedInMe.clear();
+		tutorialText.destroyDrawingCache();
+	}
+
 }

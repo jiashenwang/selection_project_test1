@@ -7,11 +7,13 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.example.selection_test1.ChildData;
-import com.example.selection_test1.ChildData.ChildType;
-import com.example.selection_test1.GroupData;
-import com.example.selection_test1.GroupData.GroupType;
 import com.example.selection_test1.com.andtinder.view.ProfileUtil;
+import com.example.selection_test1.ChildData.ChildType;
+import com.example.selection_test1.GroupData.GroupType;
+import com.example.selection_test1.R.id;
+import com.example.selection_test1.R.layout;
+import com.example.selection_test1.ChildData;
+import com.example.selection_test1.GroupData;
 import com.example.selection_test1.R;
 
 import android.content.Context;

@@ -18,7 +18,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.hardware.camera2.TotalCaptureResult;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -126,6 +125,7 @@ public class InterestList extends Activity {
     	Intent i;
 		switch(item.getItemId()){
 		case android.R.id.home:
+			onDestroy();
 			onBackPressed();
 		}
 		return true;
@@ -208,5 +208,14 @@ public class InterestList extends Activity {
 		        lv.setAdapter(new ListAdapter(getApplicationContext(), outPutAllInterestAttendees));
 		}
 		
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		loadingImg.destroyDrawingCache();
+		lv.destroyDrawingCache();
+		allInterestAttendees.clear();
+		outPutAllInterestAttendees.clear();
 	}
 }

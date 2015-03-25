@@ -23,12 +23,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
         <activity
             android:name="com.example.selection_test1.PeopleSelection"
             android:label="Attendees"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"> 
             	
              >
             <meta-data
@@ -40,6 +42,7 @@
             android:label="Interesting List"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"> 
              >
         </activity>
         <activity
@@ -47,6 +50,7 @@
             android:label="Discard List"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"> 
              >
         </activity>
         <activity
@@ -54,6 +58,7 @@
             android:label="Interester List"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"> 
              >
         </activity>
         <activity
@@ -61,6 +66,7 @@
             android:label="Profile"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"> 
              >
         </activity>        
     </application>

@@ -36,15 +36,16 @@
 			         
         	    >
 			    <com.example.selection_test1.com.andtinder.view.CardContainer
-			        android:id="@+id/layoutview_search"
-			        android:layout_width="wrap_content"
-			        android:layout_height="match_parent"
-			        android:visibility="gone"/> 
-			    <com.example.selection_test1.com.andtinder.view.CardContainer
 			        android:id="@+id/layoutview"
 			        android:layout_width="wrap_content"
 			        android:layout_height="match_parent"
-			        android:visibility="gone"/>    
+			        />  
+			    <com.example.selection_test1.com.andtinder.view.CardContainer
+			        android:id="@+id/layoutview_search"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        /> 
+  
        	    
         	</RelativeLayout>
 
@@ -94,10 +95,9 @@
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:text="There is no more new attendees"
-		            android:textColor="@color/whova_blue"
+		            android:textColor="#B8B8B8"
 		            android:layout_below="@id/loading"
 		            android:visibility="gone"
-		            android:textStyle="bold"
 		            android:gravity="center" 
 		            android:layout_centerHorizontal="true"
 		            
@@ -110,8 +110,8 @@
 		            android:text="Click Here to Browse Discards"
 		            android:layout_below="@id/looking_for_more"
 		            android:visibility="gone"
+		            android:textColor="@color/whova_blue"
 		            android:layout_marginTop="40dp"
-		            android:textColor="#B8B8B8"
 		            android:layout_gravity="center_horizontal" 
 		            android:layout_centerHorizontal="true"
 		            />

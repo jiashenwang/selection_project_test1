@@ -1,0 +1,177 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/whole_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    
+    
+    <!-- First part: card and profile detaill information -->
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+	    android:layout_marginRight="@dimen/activity_horizontal_margin"
+	    android:layout_marginTop="@dimen/activity_vertical_margin"      
+	    tools:context="com.whova.event.BZContactDetailActivity" >       
+	
+	    <!-- Header -->
+	    <LinearLayout
+	        android:id="@+id/component_header"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="2dp"      
+	        android:layout_marginBottom="6dp"
+	        android:background="@color/white"
+	        android:orientation="horizontal">
+	             
+	        <ImageView
+	            android:id="@+id/image_profile"
+	            android:layout_width="80dp"
+	            android:layout_height="80dp"
+	            android:layout_gravity="center_vertical"
+	            android:contentDescription="profile image"
+	            android:scaleType="centerCrop"
+	            android:src="@drawable/picture1" />
+	        
+	        <LinearLayout
+	            android:layout_width="0dp"
+	            android:layout_weight="1"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:padding="2dp"
+	            android:orientation="vertical">
+	                       
+	            <TextView
+	                android:id="@+id/text_name"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:hint="---"
+	                android:textSize="20sp"/>
+	    
+	            <TextView
+	                android:id="@+id/text_field"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:hint="---"
+	                android:ellipsize="end"
+	                android:layout_marginTop="5dp"
+	                android:textColor="@color/gray"/>
+	            
+	            <TextView
+	                android:id="@+id/text_loc"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:hint="---"
+	                android:ellipsize="end"
+	                android:textColor="@color/gray" />
+	                
+	        </LinearLayout>
+	        
+	        
+	        <!-- Msg icon and incommon icon -->
+	        <LinearLayout
+	            android:id="@+id/component_options"
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:visibility="gone"
+	            android:orientation="vertical">
+	            
+	            <ImageView
+	                android:id="@+id/image_msg"
+	                android:layout_width="match_parent"
+	                android:layout_height="30dp"
+	                android:padding="3dp"
+	                android:src="@drawable/picture1"/>
+	            
+	            <ImageView
+	                android:id="@+id/image_incommon"
+	                android:layout_width="match_parent"
+	                android:layout_height="30dp"
+	                android:visibility="gone"
+	                android:layout_marginTop="10dp"
+	                android:padding="3dp"
+	                android:src="@drawable/picture1"/>            
+	            
+	        </LinearLayout>   
+	    </LinearLayout>
+	    
+	    
+	    
+	    <!-- Tabs -->
+	    <!--  
+	    <android.support.v4.app.FragmentTabHost
+	        android:id="@android:id/tabhost"
+	        android:layout_below="@+id/component_header"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent">
+	    
+	        <LinearLayout
+	            android:orientation="vertical"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent">
+	    
+	            <TabWidget
+	                android:id="@android:id/tabs"
+	                android:orientation="horizontal"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:minHeight="40dp"/>
+	    
+	            <FrameLayout
+	                android:id="@android:id/tabcontent"
+	                android:layout_width="0dp"
+	                android:layout_height="0dp"
+	                android:layout_weight="0"/>
+	    
+	            <FrameLayout
+	                android:id="@+id/detail_frame"
+	                android:layout_width="match_parent"
+	                android:layout_height="0dp"
+	                android:layout_weight="1"/>
+	    
+	        </LinearLayout>
+	    </android.support.v4.app.FragmentTabHost> 
+	    --> 
+	
+	    
+	    <!--  Show progress bar when loading the profile/card detail -->
+	    <ProgressBar
+	        android:id="@+id/progress_bar"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_centerInParent="true"
+	        android:visibility="gone" />
+	        
+	</RelativeLayout>
+	
+	
+	
+	
+	<!-- banner -->
+	<LinearLayout
+	    android:id="@+id/banner_layout_view"
+	    android:layout_width="match_parent"
+	    android:layout_height="50dp"
+	    android:visibility="gone"
+	    android:gravity="bottom">
+	   
+	     <ImageView
+	        android:id="@+id/banner_view"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"/>
+	    
+	</LinearLayout>
+	
+	
+	
+	<!-- For profile image zoom in -->
+    <ImageView
+        android:id="@+id/image_prof_zoom_in"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+	
+</LinearLayout>

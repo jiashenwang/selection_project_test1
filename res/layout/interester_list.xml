@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF" >
+    android:background="@color/white" >
    	
 
 	<TextView
 	    android:id="@+id/interester_list_tutorial_message"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:text="These Users Liked Your Profile. Would You Like To Share Businese With Them?"
+	    android:text="These Users Liked Your Profile.\n Would You Like To Share Businese With Them?"
 	    android:textColor="#FFFFFF"
-	    android:background="#FFC700"
+	    android:background="@color/whova_blue"
 	    android:padding="15dp"
-	    />       
+	    android:textAlignment="gravity"
+	    android:gravity="center"
+	    />   
+ 
     
    	<ImageView 
         android:id="@+id/loading"
@@ -27,14 +30,73 @@
         android:layout_marginTop="160dp"
         android:layout_marginBottom="50dp"
        /> 
-	       
 
-
-    
-	<ListView 
-	    android:id="@+id/list"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
+    <RelativeLayout 
+        	android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+        >
+    	<ListView 
+		    android:id="@+id/list"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
 	    />
+    	<!--  
+        <RelativeLayout 
+            android:id="@+id/share_tutorial_layout"
+            android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:background="@color/white"
+            >
+            
+            <TextView 
+                android:id="@+id/send_to_text"
+             	android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:textColor="@color/whova_blue"
+		    	android:layout_centerHorizontal="true"
+		    	android:layout_marginTop="30dp"
+		    	android:text="We Have Sent Your Business Card!"
+                />
+            <TextView 
+                android:id="@+id/find_in_list_text"
+             	android:layout_width="match_parent"
+		    	android:layout_height="wrap_content"
+		    	android:textColor="@color/whova_blue"
+		    	android:text="Find This Attendee in Your Interesting List!"
+		    	android:layout_centerHorizontal="true"
+		    	android:layout_marginTop="10dp"
+		    	android:layout_below="@id/send_to_text"
+                />
+		    <CheckBox android:id="@+id/checkbox_tutorial"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Don't show this again"
+		        android:onClick="onCheckboxClicked"
+		        android:layout_below="@id/find_in_list_text"
+		        />
+		    <Button
+		        android:id="@+id/end_tutorial"
+		        android:layout_height="30dp"
+		        android:layout_width="100dp"
+		        android:text="Ok, Got It!"
+		       	android:layout_margin="5dp"
+		        android:background="@drawable/be_interested_btn"
+		        android:textColor="@color/white"	
+		        android:textSize="15sp"    
+		       	android:layout_gravity="end" 
+		       	android:layout_marginRight="10dp"
+		       	android:layout_centerHorizontal="true"
+		       	android:layout_marginTop="10dp"
+		       	android:layout_below="@id/checkbox_tutorial"
+	    	/>
+            <ImageView 
+             	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:src="@drawable/img_moved_to_interesting_list"
+		    	android:layout_below="@id/end_tutorial"
+                />
+        </RelativeLayout>-->
+    </RelativeLayout>
     
 </LinearLayout>

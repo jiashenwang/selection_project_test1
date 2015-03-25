@@ -3,6 +3,7 @@
 	<name>Selection_test1</name>
 	<comment></comment>
 	<projects>
+		<project>libShowcaseView</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

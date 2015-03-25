@@ -16,11 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
-import com.example.selection_test1.ChildData;
-import com.example.selection_test1.GroupData;
 import com.example.selection_test1.R;
-import com.example.selection_test1.ChildData.ChildType;
-import com.example.selection_test1.GroupData.GroupType;
+import com.example.selection_test1.R.id;
+import com.example.selection_test1.R.layout;
 import com.example.selection_test1.com.andtinder.model.CardModel;
 import com.example.selection_test1.com.andtinder.view.ProfileUtil;
 

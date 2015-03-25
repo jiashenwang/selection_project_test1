@@ -55,20 +55,26 @@
 				        android:layout_weight="2"
 				        />
 	    	  	<TextView
-				        android:id="@+id/field"
+				        android:id="@+id/pos"
 				        android:layout_width="160dp"
 				        android:layout_height="wrap_content"
 				        tools:text="Title2"
 				        android:layout_weight="1"
 				        />
 	    	  	<TextView
-				        android:id="@+id/loc"
+				        android:id="@+id/comp"
 				        android:layout_width="160dp"
 				        android:layout_height="wrap_content"
 				        tools:text="Title3"
 				        android:layout_weight="1"
 				        />
-			        
+			    <TextView
+				        android:id="@+id/field"
+				        android:layout_width="160dp"
+				        android:layout_height="wrap_content"
+				        tools:text="Title3"
+				        android:layout_weight="1"
+				        />
     	    </LinearLayout>
     	    
     </LinearLayout>

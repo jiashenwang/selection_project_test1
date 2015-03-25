@@ -71,7 +71,7 @@
 	    android:layout_weight="0.1" 
 	    >
 	    <Button
-	        android:id="@+id/be_interested"
+	        android:id="@+id/share"
 	        android:layout_height="30dp"
 	        android:layout_width="60dp"
 	        android:text="Share"
