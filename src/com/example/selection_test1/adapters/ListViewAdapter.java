@@ -15,6 +15,9 @@ import com.example.selection_test1.R.layout;
 import com.example.selection_test1.ChildData;
 import com.example.selection_test1.GroupData;
 import com.example.selection_test1.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,11 +25,14 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListViewAdapter extends BaseExpandableListAdapter {
 
@@ -732,18 +738,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		
-		/*
-		GroupData groupData = (GroupData) getGroup(groupPosition);
-		
-		TextView tv = new TextView(mContext);
-		tv.setText(groupData.title);
-		tv.setPadding(250, 30, 30, 30);
-		tv.setBackgroundResource(R.color.whova_blue);
-		tv.setTextColor(Color.WHITE);
-		return tv;
-		*/
+
 		
 		View groupView = null;
 		LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -771,6 +766,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			// fill in content
 			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
 			TextView textView1 = (TextView) childView.findViewById(R.id.text1);
+			TextView buttonTextView = (TextView)childView.findViewById(R.id.text_button);
 
 			if (childData.parentData.type == GroupType.CONTACT) {
 				// remove indicator only for contact section
@@ -794,7 +790,35 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 				Log.w(TAG, "childData.texts empty, some thing is wrong!");
 			}
 
+			// Handle the click listener of Linkedin connect button
+			/*
+			String itemText = childData.texts.get(0);
+			String[] itemTextTokens = itemText.split(" ");
+			if(StringUtils.containsIgnoreCase(itemTextTokens[0], "linkedin")){
+				final String profileID = ProfileUtil.getPID(mProfile);
+				String currentUserPid = EventUtil.getUserSignupPid();
+				if(false == profileID.equals(currentUserPid)){
+					buttonTextView.setVisibility(View.VISIBLE);
+					buttonTextView.setText(mLnConnectStr);
+					buttonTextView.setOnClickListener(new OnClickListener(){
+						@Override
+						public void onClick(View v){
+							String mProfileImgUrl = (String)mProfile.get("pic");
+							String mProfileName = (String)mProfile.get("name");
 
+							Intent intent = new Intent(mContext, LinkedinConnectionActivity.class);
+							intent.putExtra(LinkedinConnectionActivity.PROFILE_ID, profileID);
+							intent.putExtra(LinkedinConnectionActivity.PROFILE_IMAGE_URL, mProfileImgUrl);
+							intent.putExtra(LinkedinConnectionActivity.PROFILE_NAME, mProfileName);
+							intent.putExtra(LinkedinConnectionActivity.CONNECTION_SOURCE,
+															Constants.LN_CONNECTION_SRC_EVENT);
+							intent.putExtra(LinkedinConnectionActivity.CONNECTION_STATUS,
+															Constants.LN_CONNECTION_STATUS_YES);
+							mContext.startActivity(intent);
+						}
+					});
+				}
+			}*/
 		} else if (childData.type == ChildType.TWO_TEXT) {
 			childView = inflater.inflate(R.layout.detail_two_text_item, null);
 
@@ -804,20 +828,33 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			TextView textView2 = (TextView) childView.findViewById(R.id.text2);
 
 			// icon
-			/*
+			
 			if (childData.parentData.type == GroupType.CONN) {
 				// CONN
-				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
-				        R.drawable.default_profile);
+				DisplayImageOptions option = new DisplayImageOptions.Builder()
+					.showStubImage(R.drawable.p1)
+					.build();
+				ImageLoader imageLoader;
+				imageLoader = ImageLoader.getInstance();
+				imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
+				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,option);
 			} else {
 				// ORG and EDU icon
-				int default_icon = R.drawable.fa_building_gray;
+				/*int default_icon = R.drawable.fa_building_gray;
 				if(childData.parentData.type == GroupType.EDU)
 					default_icon = R.drawable.fa_graduation_cap_gray;
 				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
-				        default_icon);
-			}*/
-
+				        default_icon);*/
+				//Log.wtf("ORG", childData.iconURL);
+				DisplayImageOptions option = new DisplayImageOptions.Builder()
+					.showStubImage(R.drawable.p1)
+					.build();
+				ImageLoader imageLoader;
+				imageLoader = ImageLoader.getInstance();
+				imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
+				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,option);
+			}
+  
 			if (childData.texts.size() == 1) {
 				textView1.setText(childData.texts.get(0));
 				textView2.setText("");
@@ -834,23 +871,47 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 
 		} else if (childData.type == ChildType.MORE) {
 			childView = inflater.inflate(R.layout.detail_one_text_item, null);
+			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
 			TextView textView = (TextView) childView.findViewById(R.id.text1);
 			textView.setText(childData.texts.get(0));
+			imageView.setVisibility(View.GONE);
 
 		} else if (childData.type == ChildType.BIO) {
 			childView = inflater.inflate(R.layout.detail_one_text_item, null);
+			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
 			TextView textView = (TextView) childView.findViewById(R.id.text1);
 			//EditText textView = (EditText)childView.findViewById(R.id.text);
 			textView.setText(childData.texts.get(0));
+			imageView.setVisibility(View.GONE);
 
 			
-		} /*else if(childData.type == ChildType.AUTH){
+		} else if(childData.type == ChildType.AUTH){
 			childView = inflater.inflate(R.layout.detail_social_auth, null);
 			ImageView linkedinImageView = (ImageView)childView.findViewById(R.id.image_ln);
 			ImageView facebookImageView = (ImageView)childView.findViewById(R.id.image_fb);
 			ImageView googleplusImageView = (ImageView)childView.findViewById(R.id.image_gp);
-		}*/
-
+			linkedinImageView.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v){
+					//UIUtil.showShortToast(mContext, ">>>> You are trying to auth with linkedin?");
+					Toast.makeText(mContext, ">>>> You are trying to auth with linkedin?", Toast.LENGTH_SHORT).show();
+				}
+			});
+			facebookImageView.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v){
+					//UIUtil.showShortToast(mContext, ">>>> You are trying to auth with facebook?");
+					Toast.makeText(mContext, ">>>> You are trying to auth with facebook?", Toast.LENGTH_SHORT).show();
+				}
+			});
+			googleplusImageView.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v){
+					//UIUtil.showShortToast(mContext, ">>>> You are trying to auth with google plus?");
+					Toast.makeText(mContext, ">>>> You are trying to auth with google plus?", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
 		return childView;
 	}
 	@Override

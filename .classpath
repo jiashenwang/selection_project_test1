@@ -6,5 +6,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="android-query-full.0.26.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="universal-image-loader-1.9.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -4,7 +4,9 @@ package com.example.selection_test1.com.andtinder.view;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
@@ -63,9 +66,7 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 
 		
 		if(position == 0){
-			
-			//person_info.setTranscriptMode(ExpandableListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-			//.smoothScrollToPosition(person_info.getCount()-1);
+			person_info.smoothScrollToPosition(person_info.getCount()-1);
 		}
 		/*
 		if(position == 0){
@@ -91,6 +92,7 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		
 		return convertView;
 	}
+    
 	
 	
 	private String getPicUrl(CardModel model){

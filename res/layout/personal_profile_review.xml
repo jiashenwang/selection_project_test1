@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/global_container"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" 
     android:background="@drawable/border"
     android:layout_margin="10dp"
@@ -40,7 +40,7 @@
 		        android:layout_width="wrap_content"
 		    	android:layout_height="wrap_content"
 		    	android:orientation="vertical"
-		    	android:layout_weight="0.5"
+		    	android:layout_weight="0.7"
 		    	>
 	    	  	<TextView
 				        android:id="@+id/title"
@@ -76,19 +76,54 @@
 				        android:layout_weight="1"
 				        />
     	    </LinearLayout>
-    	    
-    </LinearLayout>
+   		</LinearLayout>
+
+        		<RadioGroup
+				    android:id="@+id/radio"
+				    android:layout_width="282dp"
+				    android:layout_height="36dp"
+				    android:layout_margin="5dp"
+				    android:gravity="center"
+				    android:orientation="horizontal" 
+				    android:background="@drawable/radio_bt">
+				
+				    <RadioButton
+				        android:id="@+id/btn1"
+				        android:layout_width="140dp"
+				        android:layout_height="35dp"
+				        android:layout_margin="0dp"
+				        android:background="@drawable/btn1_selector"
+				        android:button="@null"
+				        android:gravity="center" 
+				        android:text="Business Card"/>
+				
+				    <RadioButton
+				        android:id="@+id/btn2"
+				        android:layout_width="140dp"
+				        android:layout_height="35dp"
+				        android:layout_margin="0dp"
+				        android:background="@drawable/btn2_selector"
+				        android:button="@null"
+				        android:gravity="center" 
+				        android:checked="true"
+				        android:text="Insights"/>
+				
+				</RadioGroup>
     
+		    <View
+		        android:id="@+id/divider_title"
+		        android:layout_width="match_parent"
+		        android:layout_height="2dp"
+		        android:background="#2DADEF"
+		        />
 
-
- 	    <ExpandableListView 
- 	        android:id="@+id/person_info"
- 	        android:layout_width="match_parent"
- 	        android:layout_height="wrap_content"
- 	        android:layout_marginBottom="5dp"
- 	        >
- 	        
- 	    </ExpandableListView>
+    	    <ExpandableListView 
+    	        android:id="@+id/person_info"
+    	        android:layout_width="match_parent"
+    	        android:layout_height="wrap_content"
+    	        android:layout_margin="5dp"
+    	        android:background="@drawable/smart_profile_background"
+    	        />
 
     
 </LinearLayout>

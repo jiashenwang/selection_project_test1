@@ -807,6 +807,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	
 	private boolean isFirstTime()
 	{
+		
 	    SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 	    boolean ranBefore = preferences.getBoolean("PeopleSelectionTutorial", false);
 	    if (!ranBefore) {
@@ -816,6 +817,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	        editor.commit();
 	    }
 	    return !ranBefore;
+		//return true;
 	}
 	
 	@Override
