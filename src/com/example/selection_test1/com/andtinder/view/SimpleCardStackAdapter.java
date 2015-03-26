@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
@@ -60,10 +62,11 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		}
 
 		
-		/*
 		if(position == 0){
-			person_info.smoothScrollToPosition(person_info.getCount()-1);
-		}*/
+			
+			//person_info.setTranscriptMode(ExpandableListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+			//.smoothScrollToPosition(person_info.getCount()-1);
+		}
 		/*
 		if(position == 0){
 

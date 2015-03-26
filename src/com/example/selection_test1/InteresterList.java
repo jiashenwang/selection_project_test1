@@ -1,6 +1,7 @@
 package com.example.selection_test1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,18 @@ public class InteresterList extends Activity {
         setContentView(R.layout.interester_list);
 
         InitializeVar();
+        
+        lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				// TODO Auto-generated method stub
+				HashMap<String, Object> item =  (HashMap<String, Object>) lv.getItemAtPosition(position);				
+			    Intent intent = new Intent(InteresterList.this, PersonalProfileReview.class);
+			    Log.wtf("!!!!!!!!!!!!!!!!!", item.toString());
+			    intent.putExtra("PERSON", item);
+			    startActivity(intent);
+			}
+        });
         
     }
 
@@ -140,7 +153,7 @@ public class InteresterList extends Activity {
 			
 			// keep sending get request if the mobile is offline
 			while(response==null){
-				response = Utilities.GetRequest(DATA.attendees_url);
+				response = Utilities.GetRequest(DATA.attendees_url+"?type=interester/");
 			}
 			resultJson = Utilities.ToJson(response);
 			

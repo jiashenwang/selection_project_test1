@@ -85,6 +85,7 @@ public class InteresterListAdapter extends BaseAdapter{
 		TextView place = (TextView)row.findViewById(R.id.place_in_list);
 
 		
+		
 		Button share = (Button)row.findViewById(R.id.share);
 		
 		
@@ -105,7 +106,7 @@ public class InteresterListAdapter extends BaseAdapter{
 			org.setText(getOrg(temp));
 			org.setVisibility(View.VISIBLE);
 		}
-		 
+		
 		if(getField(temp)!=""){
 			field.setText(getField(temp));
 			field.setVisibility(View.VISIBLE);
@@ -115,7 +116,6 @@ public class InteresterListAdapter extends BaseAdapter{
 			place.setText(getPlace(temp));
 			place.setVisibility(View.VISIBLE);
 		}
-		
 		share.setOnClickListener(new OnClickListener() {	
 			//Activity context = new Activity(mContext);
 			
@@ -193,31 +193,27 @@ public class InteresterListAdapter extends BaseAdapter{
 		}
 	}
 	private String getOrg(Map<String, Object> profile){
-		List<Map<String,Object>>map =   (List<Map<String, Object>>) profile.get("org");
-		if(map == null || map.size()<=0){
-			return "";
+		List<String>map = (List<String>) profile.get("summary");
+		if(map.size()>=1){
+			return map.get(0).toString();
 		}else{
-			return map.get(0).get("name").toString();
+			return "";
 		}
 	}
 	private String getField(Map<String, Object> profile){
-		List<String> map =  (List<String>) profile.get("field");
-		if(map!=null){
-			if(map.size()>=1){
-				return map.get(0).toString();
-			}else{
-				return "";
-			}
+		List<String>map = (List<String>) profile.get("summary");
+		if(map.size()>=2){
+			return map.get(1).toString();
 		}else{
 			return "";
 		}
 	}
 	private String getPlace(Map<String, Object> profile){
-		List<Map<String,Object>>map =   (List<Map<String, Object>>) profile.get("loc");
-		if(map == null || map.size()<=0){
-			return "";
+		List<String>map = (List<String>) profile.get("summary");
+		if(map.size()>=3){
+			return map.get(2).toString();
 		}else{
-			return map.get(0).get("name").toString();
+			return "";
 		}
 	}
 	public static void buttonEffect(View button){

@@ -44,7 +44,7 @@ public class PersonalProfileReview extends Activity {
         setContentView(R.layout.personal_profile_review);
         
         InitializeVar();
-        
+        Log.wtf("!!!!!!!!!!!!", personInfo.toString());
 		// using fake data
         if(personInfo.get("email")!=null){
     		Map<String, Object> params = new HashMap<String, Object>();

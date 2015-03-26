@@ -841,7 +841,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		interesterBtn.destroyDrawingCache();
 		loadingView.destroyDrawingCache();
 		attendeesSearchHint.destroyDrawingCache();;
-		sv.destroyDrawingCache();
+		//sv.destroyDrawingCache();
 	}
 	
 	
