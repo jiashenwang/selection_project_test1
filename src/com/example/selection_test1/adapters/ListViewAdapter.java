@@ -19,7 +19,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
@@ -875,6 +877,20 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			TextView textView = (TextView) childView.findViewById(R.id.text1);
 			textView.setText(childData.texts.get(0));
 			imageView.setVisibility(View.GONE);
+			childView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new AlertDialog.Builder(mContext)
+				    .setMessage("If you want to read entire profile.\n Please move him/her to your interest list")
+				    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int which) { 
+				        	
+				        }
+				     })
+				    .setIcon(android.R.drawable.ic_dialog_alert)
+				     .show();
+				}
+			});
 
 		} else if (childData.type == ChildType.BIO) {
 			childView = inflater.inflate(R.layout.detail_one_text_item, null);
