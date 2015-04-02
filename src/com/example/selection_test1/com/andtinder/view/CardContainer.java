@@ -395,10 +395,14 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 if(mTopCard.getX()>=34){
                 	tv.setVisibility(View.VISIBLE);
                 	tv.setText("Not Interest");
+                	tv.setGravity(Gravity.RIGHT);
+                	tv.setRotation(30);
                 	tv.setTextColor(getResources().getColor(R.color.not_interest_red));
                 }else if(mTopCard.getX()<=32){
                 	tv.setVisibility(View.VISIBLE);
                 	tv.setText("Interest");
+                	tv.setGravity(Gravity.LEFT);
+                	tv.setRotation(-30);
                 	tv.setTextColor(getResources().getColor(R.color.interest_green));
                 }
 
