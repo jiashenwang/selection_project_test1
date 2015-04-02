@@ -1,98 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
-    
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="horizontal" >
-		<ImageView 
-		    android:id="@+id/image_ln"
-		    android:layout_width="50dip"
-		    android:layout_height="50dip"
-		    android:paddingLeft="5dp"
-		    android:paddingRight="10dp"
-		    android:src="@drawable/image_li"
-		    />
-		<LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical"
-		    android:paddingTop="5dp"
-		    >
-		    
-		    <TextView 
-		        android:id="@+id/text_ln"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textColor="@color/whova_blue"
-			    android:text="Linkedin"
-			    /> 	   
-		    
-		</LinearLayout>
-	</LinearLayout>
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="horizontal" >
-		<ImageView 
-		    android:id="@+id/image_fb"
-		    android:layout_width="50dip"
-		    android:layout_height="50dip"
-		    android:src="@drawable/image_fb"
-		    android:paddingLeft="5dp"
-		    android:paddingRight="10dp"
-		    />
-		<LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical"
-		    android:paddingTop="5dp"
-		    >
-		    
-		    <TextView 
-		        android:id="@+id/text_fb"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textColor="@color/whova_blue"
-			    android:text="Facebook"
-			    /> 	   
-		    
-		</LinearLayout>
-	</LinearLayout>
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="horizontal" >
-		<ImageView 
-		    android:id="@+id/image_gp"
-		    android:layout_width="50dip"
-		    android:layout_height="50dip"
-		    android:src="@drawable/image_gp"
-		    android:paddingLeft="5dp"
-		    android:paddingRight="10dp"
-		    />
-		<LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical"
-		    android:paddingTop="5dp"
-		    >
-		    
-		    <TextView 
-		        android:id="@+id/text_gp"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:textColor="@color/whova_blue"
-			    android:text="Google"
-			    /> 	   
-		    
-		</LinearLayout>
-	</LinearLayout>
-	
+    android:background="@color/white"
+    android:padding="@dimen/detail_list_item_padding" >
 
+	<LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:id="@+id/image_ln"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/image_profile"
+            android:layout_alignLeft="@+id/text_name"
+            android:src="@drawable/image_li"
+            
+             />
+        <!-- android:src="@drawable/ln_indicator_inactive" -->
     
-</LinearLayout>
+        <ImageView
+            android:id="@+id/image_fb"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_alignTop="@+id/image_ln"
+            android:layout_toRightOf="@+id/image_ln"
+            android:src="@drawable/image_fb" />
+    
+        <ImageView
+            android:id="@+id/image_gp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/image_ln"
+            android:layout_toRightOf="@+id/image_fb"
+            android:src="@drawable/image_gp" />
+
+    </LinearLayout>    
+
+
+</RelativeLayout>

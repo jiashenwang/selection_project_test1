@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--  
    	<Button
         android:id="@+id/be_interested"
         android:layout_height="30dp"
@@ -15,12 +16,48 @@
         android:layout_gravity="center_horizontal" 
         android:textSize="15sp"  
         android:layout_centerHorizontal="true"     
-    />      
+    />    -->  
 
+   	<RelativeLayout
+   	    android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:id="@+id/interester_btn"
+        android:background="#E0E0E0">
+   	    
+   	    <ImageView 
+   	        android:id="@+id/image_info"
+   	        android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_marginLeft="10dp"
+   	        android:src="@drawable/info"
+   	        android:layout_centerVertical="true"
+   	        />
+   	    <TextView 
+   	        android:id="@+id/intereseter_text"
+   	        android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_centerVertical="true"
+    		android:layout_marginLeft="5dp"
+    		android:text = "Attendees Interested in You"
+    		android:layout_toRightOf="@id/image_info"
+   	        />
+   	    <Button 
+   	        android:id="@+id/interester_amount"
+   	        android:layout_width="wrap_content"
+    		android:layout_height="25dp"
+    		android:layout_centerVertical="true"
+    		android:layout_marginLeft="30dp"
+    		android:text="2"
+    		android:background="@xml/interester_amount_btn"
+    		android:textColor="@color/white"
+    		android:layout_toRightOf="@id/intereseter_text"
+   	        />
+   	    
+   	</RelativeLayout>
 
     <LinearLayout
         android:id="@+id/card_area"
-        android:layout_below="@+id/be_interested"
+        android:layout_below="@+id/interester_btn"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical"
@@ -58,10 +95,10 @@
 		    	<View
 			        android:id="@+id/loading_background"
 			        android:layout_width="320dp"
-			        android:layout_height="465dp"
+			        android:layout_height="455dp"
 			        android:layout_margin="5dp"
 			        android:layout_marginBottom="10dp"
-			        android:background="@drawable/loading_border"
+			        android:background="@xml/loading_border"
 			        android:visibility="gone"
 			       	android:layout_centerHorizontal="true"
 			        >
@@ -137,7 +174,7 @@
 	        android:layout_weight="0.5"
 	        android:text="Not Interesting"
             android:layout_margin="5dp"
-	        android:background="@drawable/not_interest_ui"
+	        android:background="@xml/not_interest_ui"
 	        android:textColor="#EA7A81"	        
 	         />
     
@@ -148,7 +185,7 @@
             android:layout_weight="0.5"
             android:text="Interesting"
             android:layout_margin="5dp"
-	        android:background="@drawable/interest_ui"
+	        android:background="@xml/interest_ui"
 	        android:textColor="#FFFFFF"
            	 />
 

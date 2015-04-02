@@ -64,16 +64,16 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 			person_info.expandGroup(i);
 		}
 
-		
+		/*
 		if(position == 0){
 			person_info.smoothScrollToPosition(person_info.getCount()-1);
-		}
+		}*/
 		/*
 		if(position == 0){
 
-			final long totalScrollTime = 4000;
+			final long totalScrollTime = 10000;
 			final int scrollPeriod = 1;
-			final int heightToScroll = 1; 
+			final int heightToScroll = 10; 
 			person_info.post(new Runnable() {
 	            @Override
 	            public void run() {

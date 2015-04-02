@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@drawable/border"
+    android:background="@xml/border"
     android:layout_margin="10dp"
     >
    
@@ -85,14 +85,14 @@
 				    android:layout_margin="5dp"
 				    android:gravity="center"
 				    android:orientation="horizontal" 
-				    android:background="@drawable/radio_bt">
+				    android:background="@xml/radio_bt">
 				
 				    <RadioButton
 				        android:id="@+id/btn1"
 				        android:layout_width="140dp"
 				        android:layout_height="35dp"
 				        android:layout_margin="0dp"
-				        android:background="@drawable/btn1_selector"
+				        android:background="@xml/btn1_selector"
 				        android:button="@null"
 				        android:gravity="center" 
 				        android:text="Business Card"/>
@@ -102,7 +102,7 @@
 				        android:layout_width="140dp"
 				        android:layout_height="35dp"
 				        android:layout_margin="0dp"
-				        android:background="@drawable/btn2_selector"
+				        android:background="@xml/btn2_selector"
 				        android:button="@null"
 				        android:gravity="center" 
 				        android:checked="true"

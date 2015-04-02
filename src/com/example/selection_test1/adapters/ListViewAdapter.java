@@ -189,12 +189,11 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 
 		if (groupData.children.size() > 0) {
 		    try{
-//				groupData.title = mContext.getResources().getString(R.string.title_org,
-//				        groupData.children.size());
-				/*
+				//groupData.title = mContext.getResources().getString(R.string.title_org,
+				        //groupData.children.size());
+				
 		    	groupData.title = mContext.getResources().getString(R.string.title_org,
-				        orgList.size());*/
-				groupData.title = ("ORG");
+				        orgList.size());
 		    }catch(Exception e){
 //		    	String tmpTitle = "Affiliations(" + groupData.children.size() + ")";
 		    	String tmpTitle = "Affiliations(" + orgList.size() + ")";
@@ -283,7 +282,8 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		    try{
 //				groupData.title = mContext.getResources().getString(R.string.title_edu,
 //				        groupData.children.size());
-				groupData.title = "EDU";
+				groupData.title = mContext.getResources().getString(R.string.title_edu,
+						eduList.size());
 		    }catch(Exception e){
 		        e.printStackTrace();
 		        groupData = null;
@@ -323,8 +323,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		childData.texts.add(bio);
 
 		try{
-			//groupData.title = mContext.getResources().getString(R.string.title_bio);
-			groupData.title = "BIO";
+			groupData.title = mContext.getResources().getString(R.string.title_bio);
 		}catch(Exception e){
 			groupData.title = "Bio";
 		}
@@ -361,10 +360,9 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 
 		if (groupData.children.size() > 0) {
 			try{
-				/*
+				
 				groupData.title = mContext.getResources().getString(R.string.title_personal,
-				        groupData.children.size());*/
-				groupData.title = "PERSONAL";
+				        groupData.children.size());
 				return groupData;
 			}catch(Exception e){
 				e.printStackTrace();
@@ -418,16 +416,13 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			try {
 				Integer connCount = (Integer) profile.get("conn_total");
 				if (connCount == null) {
-					//groupData.title = mContext.getResources().getString(R.string.title_conn_nocount);
-					groupData.title = "CONN_NOCOUNT";
+					groupData.title = mContext.getResources().getString(R.string.title_conn_nocount);
 				} else {
-					//groupData.title = mContext.getResources().getString(R.string.title_conn, connCount);
-					groupData.title = "TITLE_CONN";
+					groupData.title = mContext.getResources().getString(R.string.title_conn, connCount);
 				}
 			} catch (Exception e) {
 			    if(mContext!=null)
-			        //groupData.title = mContext.getResources().getString(R.string.title_conn_nocount);
-			    	groupData.title = "CONN_NOCOUNT";
+			        groupData.title = mContext.getResources().getString(R.string.title_conn_nocount);
 			}
 			if (shouldAddMoreItem) {
 				// add a more item to list
@@ -484,10 +479,9 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			} // end for
 			if (socialGroupData.children.size() > 0) {
 			    try{
-			    	/*
+			    	
 					socialGroupData.title = mContext.getResources().getString(R.string.title_social,
-					        socialGroupData.children.size());*/
-			    	socialGroupData.title = "SOCIAL";
+					        socialGroupData.children.size());
 					result.add(socialGroupData);
 					socialDataPrepareFlag = true;
 			    }catch(Exception e){
@@ -545,10 +539,9 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			} // end for
 			if (otherGroupData.children.size() > 0) {
 			    try{
-			    	/*
+			    	
 					otherGroupData.title = mContext.getResources().getString(R.string.title_other,
-					        otherGroupData.children.size());*/
-			    	otherGroupData.title = "OTHER";
+					        otherGroupData.children.size());
 					result.add(otherGroupData);
 			    }catch(Exception e){
 			        e.printStackTrace();
@@ -584,10 +577,9 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		}
 
 		if (groupData.children.size() > 0) {
-			/*
+			
 			groupData.title = mContext.getResources().getString(R.string.title_patent,
-			        groupData.children.size());*/
-			groupData.title = "PATENT";
+			        groupData.children.size());
 			return groupData;
 		} else {
 			return null;
@@ -623,8 +615,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 
 		if (groupData!=null && groupData.children.size() > 0) {
 			try{
-				//groupData.title = mContext.getResources().getString(R.string.title_pub);
-				groupData.title = "PUB";
+				groupData.title = mContext.getResources().getString(R.string.title_pub);
 				String dblpLink = null;
 				try {
 					dblpLink = (String) ((Map) profile.get("source")).get("DBLP");
@@ -651,6 +642,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		List<String> emailList = verifyList(profile.get("email"));
 		List<String> phoneList = verifyList(profile.get("phone"));
 
+		//!!!!!!!!!!!!!!!!!!!!!!!!!! Need change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//emailList = EventUtil.getEmailsForPid(ProfileUtil.getPID(profile));
 		//emailList = verifyList(emailList);
 		emailList = null;
@@ -691,10 +683,9 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		}
 
 		if (groupData.children.size() > 0) {
-			/*
+			
 			groupData.title = mContext.getResources().getString(R.string.title_contact,
-			        groupData.children.size());*/
-			groupData.title = "CONTACT";
+			        groupData.children.size());
 			return groupData;
 		} else {
 			return null;
@@ -740,8 +731,6 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-
-		
 		View groupView = null;
 		LayoutInflater inflater = LayoutInflater.from(mContext);
 		if (convertView != null) {
@@ -749,7 +738,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		} else {
 			groupView = inflater.inflate(R.layout.new_detail_group_view, null);
 		}
-		TextView groupTitleTextView = (TextView) groupView.findViewById(R.id.group_text);
+		TextView groupTitleTextView = (TextView) groupView.findViewById(R.id.text);
 
 		GroupData groupData = (GroupData) getGroup(groupPosition);
 		groupTitleTextView.setText(groupData.title);
@@ -766,24 +755,38 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		if (childData.type == ChildType.ONE_TEXT) {
 			childView = inflater.inflate(R.layout.detail_one_text_item, null);
 			// fill in content
-			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
+			ImageView imageView = (ImageView) childView.findViewById(R.id.image);
 			TextView textView1 = (TextView) childView.findViewById(R.id.text1);
 			TextView buttonTextView = (TextView)childView.findViewById(R.id.text_button);
 
 			if (childData.parentData.type == GroupType.CONTACT) {
 				// remove indicator only for contact section
-				//((RelativeLayout) childView).removeView(childView.findViewById(R.id.indicator));
+				((RelativeLayout) childView).removeView(childView.findViewById(R.id.indicator));
 			} else if(childData.parentData.type == GroupType.PERSONAL ||
 					childData.parentData.type == GroupType.OTHER){
 				try{
-					//imageView.setImageResource(R.drawable.fa_globe_gray);
+					imageView.setImageResource(R.drawable.fa_globe_gray);
 				}catch(Exception e){
-					//ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
-					        //R.drawable.fa_globe_gray);
+					/*
+					ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
+					        R.drawable.fa_globe_gray);*/
+					DisplayImageOptions option = new DisplayImageOptions.Builder()
+					.showStubImage(R.drawable.fa_globe_gray)
+					.build();
+					ImageLoader imageLoader;
+					imageLoader = ImageLoader.getInstance();
+					imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
+					ImageLoader.getInstance().displayImage(childData.iconURL, imageView,option);
 				}
 			}else{
-				//ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
-				        //R.drawable.default_website);
+				
+				DisplayImageOptions option = new DisplayImageOptions.Builder()
+				.showStubImage(R.drawable.default_website)
+				.build();
+				ImageLoader imageLoader;
+				imageLoader = ImageLoader.getInstance();
+				imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
+				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,option);
 			}
 
 			if (childData.texts.size() == 1) {
@@ -825,7 +828,7 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			childView = inflater.inflate(R.layout.detail_two_text_item, null);
 
 			// fill in content
-			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
+			ImageView imageView = (ImageView) childView.findViewById(R.id.image);
 			TextView textView1 = (TextView) childView.findViewById(R.id.text1);
 			TextView textView2 = (TextView) childView.findViewById(R.id.text2);
 
@@ -833,28 +836,38 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			
 			if (childData.parentData.type == GroupType.CONN) {
 				// CONN
-				DisplayImageOptions option = new DisplayImageOptions.Builder()
-					.showStubImage(R.drawable.p1)
+				if(childData.iconURL==null){
+					imageView.setImageResource(R.drawable.default_profile);
+				}else{
+					DisplayImageOptions option = new DisplayImageOptions.Builder()
+					.showStubImage(R.drawable.default_profile)  //.showStubImage(R.drawable.default_profile)
 					.build();
 				ImageLoader imageLoader;
 				imageLoader = ImageLoader.getInstance();
 				imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
 				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,option);
+				}
+
 			} else {
 				// ORG and EDU icon
-				/*int default_icon = R.drawable.fa_building_gray;
+				int default_icon = R.drawable.fa_building_gray;
 				if(childData.parentData.type == GroupType.EDU)
 					default_icon = R.drawable.fa_graduation_cap_gray;
-				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
-				        default_icon);*/
-				//Log.wtf("ORG", childData.iconURL);
-				DisplayImageOptions option = new DisplayImageOptions.Builder()
-					.showStubImage(R.drawable.p1)
+
+				if(childData.iconURL==null){
+					imageView.setImageResource(default_icon);
+				}else{
+					DisplayImageOptions option = new DisplayImageOptions.Builder()
+					.showStubImage(default_icon)
 					.build();
 				ImageLoader imageLoader;
 				imageLoader = ImageLoader.getInstance();
 				imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
 				ImageLoader.getInstance().displayImage(childData.iconURL, imageView,option);
+				}
+
+				/*ImageLoader.getInstance().displayImage(childData.iconURL, imageView,
+		        default_icon);*/
 			}
   
 			if (childData.texts.size() == 1) {
@@ -868,10 +881,28 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 			}
 			if (childData.parentData.type == GroupType.CONN) {
 				// hide indicator for connections
-				//childView.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
+				childView.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
 			}
 
 		} else if (childData.type == ChildType.MORE) {
+			childView = inflater.inflate(R.layout.detail_more_item, null);
+			TextView textView = (TextView) childView.findViewById(R.id.text1);
+			textView.setText(childData.texts.get(0));
+			childView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new AlertDialog.Builder(mContext)
+				    .setMessage("If you want to read entire profile.\n Please move him/her to your interest list")
+				    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int which) { 
+				        	
+				        }
+				     })
+				    .setIcon(android.R.drawable.ic_dialog_alert)
+				     .show();
+				}
+			});
+			/*
 			childView = inflater.inflate(R.layout.detail_one_text_item, null);
 			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
 			TextView textView = (TextView) childView.findViewById(R.id.text1);
@@ -890,15 +921,12 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 				    .setIcon(android.R.drawable.ic_dialog_alert)
 				     .show();
 				}
-			});
-
+			});*/
 		} else if (childData.type == ChildType.BIO) {
-			childView = inflater.inflate(R.layout.detail_one_text_item, null);
-			ImageView imageView = (ImageView) childView.findViewById(R.id.image1);
-			TextView textView = (TextView) childView.findViewById(R.id.text1);
+			childView = inflater.inflate(R.layout.detail_bio, null);
+			TextView textView = (TextView) childView.findViewById(R.id.text);
 			//EditText textView = (EditText)childView.findViewById(R.id.text);
 			textView.setText(childData.texts.get(0));
-			imageView.setVisibility(View.GONE);
 
 			
 		} else if(childData.type == ChildType.AUTH){
@@ -935,147 +963,8 @@ public class ListViewAdapter extends BaseExpandableListAdapter {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 	
-	
-	/*
-	public ListViewAdapter(Context simpleCardStackAdapter) {
-		// TODO Auto-generated constructor stub
-		context = simpleCardStackAdapter;
-	}
-
-	public ListViewAdapter(SimpleCardStackAdapter simpleCardStackAdapter) {
-		// TODO Auto-generated constructor stub
-		context = simpleCardStackAdapter.getContext();
-	}
-
-	public ListViewAdapter(Context context, Person p) {
-		// TODO Auto-generated constructor stub
-		this.context = context;
-		person = new Person(p.getPersonId(), p.getPersonName(),
-				p.getPersonMid(), p.getPersonFields(), p.getPersonWork(), p.getPersonEdu());
-		works = (ArrayList<Work>) person.getPersonWork().clone();
-		education = (ArrayList<Education>) person.getPersonEdu().clone();
-	}
-
-	@Override
-	public int getGroupCount() {
-		// TODO Auto-generated method stub
-		return parentList.length;
-	}
-
-	@Override
-	public int getChildrenCount(int groupPosition) {
-		// TODO Auto-generated method stub
-		if(parentList[groupPosition]=="Affiliations"){
-			return works.size();
-		}else if(parentList[groupPosition]=="Education"){
-			return education.size();
-		}else{
-			return 0;
-		}
-	}
-
-	@Override
-	public Object getGroup(int groupPosition) {
-		// TODO Auto-generated method stub
-		return parentList[groupPosition];
-	}
-
-	@Override
-	public Object getChild(int groupPosition, int childPosition) {
-		// TODO Auto-generated method stub
-		if(parentList[groupPosition]=="Affiliations"){
-			return works.get(childPosition);
-		}else if(parentList[groupPosition]=="Education"){
-			return education.get(childPosition);
-		}else{
-			return "";
-		}
-	}
-
-	@Override
-	public long getGroupId(int groupPosition) {
-		// TODO Auto-generated method stub
-		return groupPosition;
-	}
-
-	@Override
-	public long getChildId(int groupPosition, int childPosition) {
-		// TODO Auto-generated method stub
-		return childPosition;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
-		//\ TODO Auto-generated method stub
-		
-		TextView tv = new TextView(context);
-		tv.setText(parentList[groupPosition]);
-		tv.setPadding(250, 30, 30, 30);
-		tv.setBackgroundResource(R.color.whova_blue);
-		tv.setTextColor(Color.WHITE);
-		return tv;
-	}
-
-	@Override
-	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		TextView tv = new TextView(context);
-		tv.setPadding(120, 30, 30, 30);
-		
-		
-		if(parentList[groupPosition]=="Affiliations"){
-			String tempCompany = works.get(childPosition).getcompany();
-			String tempPeriod = "";
-			if(works.get(childPosition).ifCurrent()){
-				tempPeriod = works.get(childPosition).getStartYear() + " - Present";
-			}else{
-				tempPeriod = works.get(childPosition).getStartYear() + " - " +
-						works.get(childPosition).getEndYear();
-			}
-			String tempPos = works.get(childPosition).getPosition();
-			tv.setLines(3);
-			tv.setText(tempCompany+"\n"+tempPos+"\n"+tempPeriod);
-
-		}else if(parentList[groupPosition]=="Education"){
-			String tempSchool = education.get(childPosition).getSchoolName();
-			String tempMajor = "";
-			String tempPeriod = "";
-			for(int i=0; i<education.get(childPosition).getMajor().size(); i++){
-				if(i==0)
-					tempMajor = education.get(childPosition).getMajor().get(i);
-				else
-					tempMajor += ", "+ education.get(childPosition).getMajor().get(i);
-			}
-			if(education.get(childPosition).ifCurrent()){
-				tempPeriod = education.get(childPosition).getStartYear() + " - Present";
-			}else{
-				tempPeriod = education.get(childPosition).getStartYear() + " - " +
-						education.get(childPosition).getEndYear();
-			}
-			tv.setLines(3);
-			tv.setText(tempSchool+"\n"+tempMajor+"\n"+tempPeriod);
-		}else{
-
-		}
-		
-		tv.setTextColor(Color.BLACK);
-		return tv;
-	}
-
-	@Override
-	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		// TODO Auto-generated method stub
-		return false;
-	}*/
 	
 	public static String verifyString(Object o) {
 

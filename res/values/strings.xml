@@ -4,4 +4,28 @@
     <string name="app_name">Selection_test1</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    <string name="title_org">Affiliations (%1$d)</string>
+
+    <string name="title_edu">Education (%1$d)</string>
+
+    <string name="title_personal">Personal Pages (%1$d)</string>
+
+    <string name="title_social">Social Profiles (%1$d)</string>
+
+    <string name="title_conn">Acquaintance (%1$d)</string>
+
+    <string name="title_conn_nocount">Connections</string>
+
+    <string name="title_other">Other Web Presences (%1$d)</string>
+
+    <string name="title_patent">Patents (%1$d)</string>
+
+    <string name="title_pub">Publications</string>
+
+    <string name="title_contact">Contact Information (%1$d)</string>
+
+    <string name="title_bio">Bio</string>
+
+    <string name="connection_filter_hint">City, company, etc.</string>
 </resources>

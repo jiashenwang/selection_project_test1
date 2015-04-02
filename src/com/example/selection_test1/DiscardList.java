@@ -127,7 +127,7 @@ public class DiscardList extends Activity {
         //initializeFakeData();
         lv = (ListView)findViewById(R.id.list);
         loadingImg = (ImageView)findViewById(R.id.loading);
-        loadingImg.setBackgroundResource(R.drawable.loading_animation);
+        loadingImg.setBackgroundResource(R.xml.loading_animation);
         AnimationDrawable ad = (AnimationDrawable) loadingImg.getBackground();
         ad.start();
         

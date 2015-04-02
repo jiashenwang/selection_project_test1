@@ -93,7 +93,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	private TextView lookingForMore, toDiscard, noMoreNewAttendees;
 	private AQuery aq;
 	private ImageView loadingImg;
-	private Button interesterBtn;
+	private RelativeLayout interesterBtn;
 	View loadingView;
 	private List<String> searchedItems;
 	private Menu menu;
@@ -180,31 +180,13 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     	        
     		}
 		});
-        interesterBtn.setOnTouchListener(new OnTouchListener() {
-    		@Override
-    		public boolean onTouch(View v, MotionEvent event) {
-    	          switch (event.getAction()) {
-    		          case MotionEvent.ACTION_DOWN: {
-    		              Button view = (Button) v;
-    		              view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-    		              v.invalidate();
-    		              break;
-    		          }
-    		          case MotionEvent.ACTION_UP:
-    		        	  Intent i = new Intent(PeopleSelection.this, InteresterList.class);
-    		        	  startActivity(i);
-    		             
-    		          case MotionEvent.ACTION_CANCEL: {
-  							holdButton();
-    		        	  Button view = (Button) v;
-    		        	  view.getBackground().clearColorFilter();
-    		        	  view.invalidate();
-    		              break;
-    		          }
-    	          }
-    	          return true;
-    	        
-    		}
+        interesterBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				  Intent i = new Intent(PeopleSelection.this, InteresterList.class);
+		      	  startActivity(i);
+			}
 		});
         
         toDiscard.setOnClickListener(new OnClickListener() {
@@ -419,7 +401,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
         lookingForMore = (TextView)findViewById(R.id.looking_for_more);
         toDiscard = (TextView)findViewById(R.id.to_discard);
         noMoreNewAttendees = (TextView)findViewById(R.id.no_more_new_attendees);
-        interesterBtn = (Button) findViewById(R.id.be_interested);
+        interesterBtn = (RelativeLayout) findViewById(R.id.interester_btn);
         attendeesSearchHint = (ListView)findViewById(R.id.auto_complete_attendees_search);
 
     	more = true;
@@ -469,7 +451,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	}
 	
 	private void loadingMode(){
-        loadingImg.setBackgroundResource(R.drawable.loading_animation);
+        loadingImg.setBackgroundResource(R.xml.loading_animation);
         AnimationDrawable ad = (AnimationDrawable) loadingImg.getBackground();
         ad.start();
 		toDiscard.setTextColor(Color.GRAY);
