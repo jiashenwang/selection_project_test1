@@ -380,7 +380,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 mMatrix.mapPoints(points);
                 mTopCard.setPivotX(points[0]);
                 mTopCard.setPivotY(points[1]);
-
+               
                 break;
             case MotionEvent.ACTION_MOVE:
             	
@@ -391,19 +391,18 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 dx = x - mLastTouchX;
                 dy = y - mLastTouchY;
 
-                Log.wtf("!!!!!!!!", mTopCard.getX()+"");
                 if(mTopCard.getX()>=34){
                 	tv.setVisibility(View.VISIBLE);
-                	tv.setText("Not Interest");
-                	tv.setGravity(Gravity.RIGHT);
+                	tv.setText(" Not Interest ");
                 	tv.setRotation(30);
                 	tv.setTextColor(getResources().getColor(R.color.not_interest_red));
+                	tv.setBackgroundResource(R.xml.not_interest_text_hint);
                 }else if(mTopCard.getX()<=32){
                 	tv.setVisibility(View.VISIBLE);
-                	tv.setText("Interest");
-                	tv.setGravity(Gravity.LEFT);
+                	tv.setText(" Interest ");
                 	tv.setRotation(-30);
                 	tv.setTextColor(getResources().getColor(R.color.interest_green));
+                	tv.setBackgroundResource(R.xml.interest_text_hint);
                 }
 
                 

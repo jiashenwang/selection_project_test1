@@ -73,12 +73,12 @@ import android.widget.ToggleButton;
 
 public class PeopleSelection extends Activity implements View.OnClickListener {
 	
-	final public int MAX_CARDS_NUM = 2;
 	final private int amountPerDeck = 4;
 	private int temp_counter = 0;
 	
 	private RelativeLayout deckLayout;
 	private CardContainer mCardContainer;
+	private CardContainer mCardContainer2;
 	private CardContainer mCardContainer_search;
 	private Button interest, not_interest;
 	SimpleCardStackAdapter adapter;
@@ -88,19 +88,17 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	private ArrayList<CardModel> attendeesBuffer2;
 	private ArrayList<Map<String, Object>> attendees;
 	private ArrayList<Map<String, Object>> attendees_search;
-	//private ArrayList<Map<String, Object>> interestList;
-	//private ArrayList<Map<String, Object>> notInterestList;
 	private TextView lookingForMore, toDiscard, noMoreNewAttendees;
 	private AQuery aq;
 	private ImageView loadingImg;
 	private RelativeLayout interesterBtn;
 	View loadingView;
-	private List<String> searchedItems;
-	private Menu menu;
 	private ListView attendeesSearchHint;
 
 	Resources r;
 	
+	private boolean CardContainerToggle;
+	private boolean read = false;
 	private boolean more;
 	private boolean noMoreAttendee;
 	private boolean noMoreSearch;
@@ -140,9 +138,14 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		          }
     		          case MotionEvent.ACTION_UP:
     		              // Your action here on button click
-    		        	  if(noMoreSearch)
-    		        		  mCardContainer.notLike();
-    		        	  else
+    		        	  if(noMoreSearch){
+    		        		  if(CardContainerToggle){
+    		        			  mCardContainer.notLike();
+    		        		  }else{
+    		        			  mCardContainer2.notLike();
+    		        		  }
+    		        		  
+    		        	  }else
     		        		  mCardContainer_search.notLike();
     		          case MotionEvent.ACTION_CANCEL: {
   							holdButton();
@@ -166,8 +169,13 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		          }
     		          case MotionEvent.ACTION_UP:
     		              // Your action here on button click
-    		        	  if(noMoreSearch)
-    		        		  mCardContainer.like();
+    		        	  if(noMoreSearch){
+    		        		  if(CardContainerToggle){
+    		        			  mCardContainer.like();
+    		        		  }else{
+    		        			  mCardContainer2.like();
+    		        		  }
+    		        	  }
     		        	  else
     		        		  mCardContainer_search.like();
     		             
@@ -392,6 +400,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		// TODO Auto-generated method stub
 		deckLayout = (RelativeLayout)findViewById(R.id.deck_layout);
         mCardContainer = (CardContainer) findViewById(R.id.layoutview);
+        mCardContainer2 = (CardContainer) findViewById(R.id.layoutview2);
         not_interest = (Button)findViewById(R.id.not_interest);
         interest = (Button)findViewById(R.id.interest);
         loadingView = (View) findViewById(R.id.loading_background);
@@ -408,11 +417,11 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     	bufferCounter1 = 0;
     	bufferCounter2 = 0;
     	bufferToggle = true;
+    	CardContainerToggle = true;
     	
     	noMoreAttendee = true;
     	noMoreSearch = true;
     	
-    	searchedItems = new ArrayList();
     	currentCards = new ArrayList();
         attendeesBuffer1 = new ArrayList();
         attendeesBuffer2 = new ArrayList();
@@ -576,7 +585,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 						for(int i=0; i<attendees.size(); i++){
 							attendeesBuffer2.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
 						}
-						//setListener(attendeesBuffer2);
+						read = true;
 					}
 
 				}else{
@@ -585,7 +594,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 					for(int i=0; i<attendees.size(); i++){
 						attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
 					}
-					//setListener(attendeesBuffer1);
+					read = true;
 					
 				}
 				exitLoadingMode();
@@ -611,10 +620,13 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                decisionPost(""/*email*/,
 	                		""/*pid*/, 
 	                		true);
-	                		
+
 	                if(bufferToggle){
 	                	bufferCounter1++;
-	                	if(bufferCounter1 >= (int)amountPerDeck*0.7){
+	                	if(bufferCounter1 == amountPerDeck -1){
+	                		showNewDeck();
+	                	}
+	                	if(!read && bufferCounter1 >= (int)amountPerDeck*0.7){
 	                		if(temp_counter<2)
 	                			loadMore();
 	                	}
@@ -627,7 +639,10 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                	}
 	                }else{
 	                	bufferCounter2++;
-	                	if(bufferCounter2 >= (int)amountPerDeck*0.7){
+	                	if(bufferCounter2 == amountPerDeck -1){
+	                		showNewDeck();
+	                	}
+	                	if(!read && bufferCounter2 >= (int)amountPerDeck*0.7){
 	                		if(temp_counter<2)
 	                			loadMore();
 	                	}
@@ -648,7 +663,6 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 				@Override
 	            public void onDislike() {
 	                Log.wtf("Swipeable Cards","I dislike the card");
-	                
 	                // Caution!!! current email and pid are empty, so i set them to empty string
 	                // temp.getProfile().get("email").toString()
 	                // temp.getProfile().get("pid").toString()
@@ -658,7 +672,10 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                
 	                if(bufferToggle){
 	                	bufferCounter1++;
-	                	if(bufferCounter1 >= (int)(amountPerDeck*0.7)){
+	                	if(bufferCounter1 == amountPerDeck -1){
+	                		showNewDeck();
+	                	}
+	                	if(!read && bufferCounter1 >= (int)(amountPerDeck*0.7)){
 	                		if(temp_counter<2)
 	                			loadMore();
 	                	}
@@ -671,7 +688,10 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                	}
 	                }else{
 	                	bufferCounter2++;
-	                	if(bufferCounter2 >= (int)(amountPerDeck*0.7)){
+	                	if(bufferCounter2 == amountPerDeck -1){
+	                		showNewDeck();
+	                	}
+	                	if(!read && bufferCounter2 >= (int)(amountPerDeck*0.7)){
 	                		if(temp_counter<2)
 	                			loadMore();
 	                	}
@@ -698,36 +718,65 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	}
 	private void swicthToBuffer2(){
 
+		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 2");
 		bufferToggle = false;
 		bufferCounter1 = 0;
 		attendeesBuffer1.clear();
-		if(attendeesBuffer2 != null && attendeesBuffer2.size()!=0){
-			//setListener(attendeesBuffer2);
-			mCardContainer.setAdapter(adapter);
-			exitLoadingMode();
-		}
-		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 2");
-		temp_counter++;
 
-		loadingMode();	
+		temp_counter++;
+		read = false;
+		CardContainerToggle = false;
+		//loadingMode();	
 		
 
 	}
 	private void swicthToBuffer1(){
 
+		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 1");
+		
 		bufferToggle = true;
 		bufferCounter2 = 0;
 		attendeesBuffer2.clear();
-		if(attendeesBuffer1 != null && attendeesBuffer1.size()!=0){
-			//setListener(attendeesBuffer1);
-			mCardContainer.setAdapter(adapter);
-			exitLoadingMode();
-		}
-		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 1");
-		temp_counter++;
 
-		loadingMode();	
+		temp_counter++;
+		read = false;
+		CardContainerToggle = true;
+		//loadingMode();	
 		
+	}
+	
+	private void showNewDeck(){
+		
+		if(bufferToggle){
+			if(attendeesBuffer2 != null && attendeesBuffer2.size()!=0){
+				
+				mCardContainer2.setAdapter(adapter);
+				deckLayout.removeView(mCardContainer2);
+				deckLayout.addView(mCardContainer2);
+				deckLayout.removeView(mCardContainer);
+				deckLayout.addView(mCardContainer);
+			}
+		}else{
+			if(attendeesBuffer1 != null && attendeesBuffer1.size()!=0){
+
+				mCardContainer.setAdapter(adapter);
+				deckLayout.removeView(mCardContainer);
+				deckLayout.addView(mCardContainer);
+				deckLayout.removeView(mCardContainer2);
+				deckLayout.addView(mCardContainer2);
+			}
+		}
+
+			
+			/*
+			final RelativeLayout.LayoutParams params = 
+	                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 
+	                                                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+			params.addRule(RelativeLayout.BELOW, previousId);
+			
+			previousId++;*/
+
 	}
 	
 	public void decisionPost(String email, String pid, boolean interested){

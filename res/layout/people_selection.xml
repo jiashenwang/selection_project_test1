@@ -76,7 +76,12 @@
 			        android:id="@+id/layoutview"
 			        android:layout_width="wrap_content"
 			        android:layout_height="match_parent"
-			        />  
+			        />   
+			    <com.example.selection_test1.com.andtinder.view.CardContainer
+			        android:id="@+id/layoutview2"
+			        android:layout_width="wrap_content"
+			        android:layout_height="match_parent"
+			        />    
 			    <com.example.selection_test1.com.andtinder.view.CardContainer
 			        android:id="@+id/layoutview_search"
 			        android:layout_width="wrap_content"
