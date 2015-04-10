@@ -68,26 +68,29 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		if(position == 0){
 			person_info.smoothScrollToPosition(person_info.getCount()-1);
 		}*/
-		/*
+		
+		
 		if(position == 0){
+			
+			new Thread(new Runnable() {
 
-			final long totalScrollTime = 10000;
-			final int scrollPeriod = 1;
-			final int heightToScroll = 10; 
-			person_info.post(new Runnable() {
-	            @Override
-	            public void run() {
-	                    new CountDownTimer(totalScrollTime, scrollPeriod ) {
-	                        public void onTick(long millisUntilFinished) {
-	                        	person_info.scrollBy(0, heightToScroll);
-	                        }
-	                    public void onFinish() {
-	                        //you can add code for restarting timer here
-	                    }
-	                }.start();
-	            }
-	        });
-		}*/
+			    @Override
+			    public void run() {
+			        int listViewSize = person_info.getAdapter().getCount();
+
+			        for (int index = 0; index < listViewSize ; index++) {
+			        	person_info.smoothScrollToPositionFromTop(person_info.getLastVisiblePosition(), 0, 6000);
+			            try {
+			                // it helps scrolling to stay smooth as possible (by experiment)
+			                Thread.sleep(60);
+			            } catch (InterruptedException e) {
+
+			            }
+			        }
+			    }
+			}).start();
+
+		}
 
 		
 		return convertView;

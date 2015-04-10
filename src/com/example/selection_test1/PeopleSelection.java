@@ -294,7 +294,6 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 
 				@Override
 				public boolean onQueryTextSubmit(String query) {
-					Log.wtf("!!!!!!!!!!!!", query);
 					findAttendees(query);
 					return true;
 				}
@@ -626,7 +625,8 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                	if(bufferCounter1 == amountPerDeck -1){
 	                		showNewDeck();
 	                	}
-	                	if(!read && bufferCounter1 >= (int)amountPerDeck*0.7){
+	                	if(!read && bufferCounter1 >= (int)(amountPerDeck*0.7)){
+	                		Log.wtf("!!!!!!!!!!!!", "Like Load more");
 	                		if(temp_counter<2)
 	                			loadMore();
 	                	}
@@ -642,7 +642,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                	if(bufferCounter2 == amountPerDeck -1){
 	                		showNewDeck();
 	                	}
-	                	if(!read && bufferCounter2 >= (int)amountPerDeck*0.7){
+	                	if(!read && bufferCounter2 >= (int)(amountPerDeck*0.7)){
 	                		if(temp_counter<2)
 	                			loadMore();
 	                	}
@@ -749,7 +749,6 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		
 		if(bufferToggle){
 			if(attendeesBuffer2 != null && attendeesBuffer2.size()!=0){
-				
 				mCardContainer2.setAdapter(adapter);
 				deckLayout.removeView(mCardContainer2);
 				deckLayout.addView(mCardContainer2);
