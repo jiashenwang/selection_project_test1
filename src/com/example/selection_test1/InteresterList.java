@@ -61,7 +61,6 @@ public class InteresterList extends Activity {
 				// TODO Auto-generated method stub
 				HashMap<String, Object> item =  (HashMap<String, Object>) lv.getItemAtPosition(position);				
 			    Intent intent = new Intent(InteresterList.this, PersonalProfileReview.class);
-			    Log.wtf("!!!!!!!!!!!!!!!!!", item.toString());
 			    intent.putExtra("PERSON", item);
 			    startActivity(intent);
 			}

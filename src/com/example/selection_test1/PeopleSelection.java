@@ -440,6 +440,8 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		
 		if(isFirstTime()){
 			sv = new ShowcaseView.Builder(this)
+				.setTarget(tLike)
+				.setContentText("Interesting Profile? \n You Can Save This Attendee to Your Interesting List")
 				.setOnClickListener(this)
 				.build();
 			sv.setButtonText("NEXT");
@@ -449,14 +451,13 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
 	        lps.setMargins(margin, margin, margin, margin);
 			sv.setButtonPosition(lps);
-			tutorialPageNum = 0;
+			tutorialPageNum = 1;
 		}
-		
 		
 		getAllAttendees gaa = new getAllAttendees(this, "");
 		gaa.execute();
 		
-	}
+	} 
 	
 	private void loadingMode(){
         loadingImg.setBackgroundResource(R.xml.loading_animation);
@@ -808,24 +809,17 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch(tutorialPageNum){
-			case 0:
-				sv.setShowcase(tLike, true);
-				sv.setContentTitle("Tutorial Page 1");
-				sv.setContentText("Interesting Profile? \n You Can Save This Attendee to Your Interesting List");
-			break;
+
 			case 1:
 				sv.setShowcase(tDislike, true);
-				sv.setContentTitle("Tutorial Page 2");
 				sv.setContentText("Not Interesting? \n You Can Discard This Attendee and You Won't See Him Again");
 			break;
 			case 2:
 				sv.setShowcase(tSearch, true);
-				sv.setContentTitle("Tutorial Page 3");
 				sv.setContentText("Search For A Specific Attendee At Any Time");
 			break;
 			case 3:
 				sv.setShowcase(tList, true);
-				sv.setContentTitle("Tutorial Page 4");
 				sv.setContentText("You Can Find All Attendees Which You Are Interested In");
 			break;
 			case 4:
@@ -839,7 +833,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	{
 		
 	    SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-	    boolean ranBefore = preferences.getBoolean("PeopleSelectionTutorial", false);
+	    boolean ranBefore = preferences.getBoolean("WHOVA", false);
 	    if (!ranBefore) {
 	        // first time
 	        SharedPreferences.Editor editor = preferences.edit();
