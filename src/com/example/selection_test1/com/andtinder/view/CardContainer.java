@@ -6,10 +6,13 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -141,6 +145,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
             }
         });
         mTopCard = getChildAt(getChildCount() - 2);
+        
         CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
         if(mTopCard != null){
@@ -149,6 +154,9 @@ public class CardContainer extends AdapterView<ListAdapter> {
             if(getChildAt(getChildCount() - 3)!=null){
             	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
             }
+            
+            final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
+			autoScroll(getContext(),person_info);
         }
         if (cardModel.getOnCardDimissedListener() != null) {
             cardModel.getOnCardDimissedListener().onDislike();
@@ -156,8 +164,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
         }
 
     } 
-    
-    public void like(){
+
+	public void like(){
     	
     	
         final View topCard = mTopCard;
@@ -189,6 +197,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
             if(getChildAt(getChildCount() - 3)!=null){
             	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
             }
+            final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
+			autoScroll(getContext(),person_info);
         }
         if (cardModel.getOnCardDimissedListener() != null) {
             cardModel.getOnCardDimissedListener().onLike();
@@ -224,6 +234,11 @@ public class CardContainer extends AdapterView<ListAdapter> {
         if (getChildCount() != 0) {
             mTopCard = getChildAt(getChildCount() - 1);
             mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+            
+            if(mTopCard!=null){
+                final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
+    			autoScroll(getContext(),person_info);
+            }
         }
         
         // change here !!!!!!!!!!!!!!!!!!!!
@@ -551,6 +566,53 @@ public class CardContainer extends AdapterView<ListAdapter> {
             this.viewType = viewType;
         }
     }
+    
+    private void autoScroll(final Context c, final ExpandableListView person_info) {
+    	
+    	SharedPreferences p = c.getSharedPreferences("WHOVA", Context.MODE_PRIVATE);
+    	int resultInt = p.getInt("SCROLL", 0);
+
+    	SharedPreferences.Editor editor = c.getSharedPreferences("WHOVA", Context.MODE_PRIVATE).edit();
+    	switch(resultInt){
+    		case 0:
+        		editor.putInt("SCROLL", 1);
+        		editor.commit();
+        		scroll(person_info);
+        		break;
+    		case 1:
+        		editor.putInt("SCROLL", 2);
+        		editor.commit();
+        		scroll(person_info);
+        		break;
+    		case 2:
+        		editor.putInt("SCROLL", 3);
+        		editor.commit();
+        		scroll(person_info);
+    			break;
+			default:
+    			break;	
+    	}
+    
+	}
+    private void scroll(final ExpandableListView person_info){
+        new Thread(new Runnable() {
+        	
+		    @Override
+		    public void run() {
+		        int listViewSize = person_info.getAdapter().getCount();
+
+		        for (int index = 0; index < listViewSize ; index++) {
+		        	person_info.smoothScrollToPositionFromTop(person_info.getLastVisiblePosition()+100, 0, 24000);
+		            try {
+		                // it helps scrolling to stay smooth as possible (by experiment)
+		                Thread.sleep(60);
+		            } catch (InterruptedException e) {
+
+		            }
+		        }
+		    }
+		}).start();
+    }
 
     private class GestureListener extends SimpleOnGestureListener {
         @Override
@@ -585,6 +647,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     if(getChildAt(getChildCount() - 3)!=null){
                     	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
                     }
+                    final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
+        			autoScroll(getContext(),person_info);
                 }
 
                 if (cardModel.getOnCardDimissedListener() != null) {

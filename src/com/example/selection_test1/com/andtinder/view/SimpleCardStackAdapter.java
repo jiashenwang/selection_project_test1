@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -63,14 +64,16 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		for(int i=0; i < lva.getGroupCount(); i++){
 			person_info.expandGroup(i);
 		}
-
+		
 		/*
 		if(position == 0){
 			person_info.smoothScrollToPosition(person_info.getCount()-1);
 		}*/
 		
+
 		
-		if(position == 0){
+		
+		if(convertView.isFocused()){
 			
 			new Thread(new Runnable() {
 
