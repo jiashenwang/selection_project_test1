@@ -56,6 +56,7 @@ import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -134,6 +135,8 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		              Button view = (Button) v;
     		              view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
     		              v.invalidate();
+    		              
+    		        	  interest.setEnabled(false);
     		              break;
     		          }
     		          case MotionEvent.ACTION_UP:
@@ -165,6 +168,8 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		              Button view = (Button) v;
     		              view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
     		              v.invalidate();
+    		              
+    		        	  not_interest.setEnabled(false);
     		              break;
     		          }
     		          case MotionEvent.ACTION_UP:
@@ -250,7 +255,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 									}
 								}
 							});
-						 
+						  
 							adapter_search.clear();
 							adapter_search.add(searchResult);
 							mCardContainer_search = 
@@ -258,6 +263,12 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 							mCardContainer_search.setVisibility(View.VISIBLE);
 							mCardContainer_search.bringToFront();
 							mCardContainer_search.setAdapter(adapter_search);
+							
+							// hide keyboard
+							InputMethodManager imm = (InputMethodManager)getSystemService(
+								      Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+							
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -356,10 +367,10 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		// TODO Auto-generated method stub
 		not_interest.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 		//not_interest.invalidate();
-		not_interest.setClickable(false);
+		not_interest.setEnabled(false);
 		interest.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
 		//interest.invalidate();
-		interest.setClickable(false);
+		interest.setEnabled(false);
 		Timer buttonTimer = new Timer();
 		buttonTimer.schedule(new TimerTask() {
 
@@ -369,17 +380,17 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		            @Override
 		            public void run() {
 		                if(more){
-			            	not_interest.setClickable(true);
+			            	not_interest.setEnabled(true);
 			            	not_interest.getBackground().clearColorFilter();
 			            	//not_interest.invalidate();
-			            	interest.setClickable(true);
+			            	interest.setEnabled(true);
 			            	interest.getBackground().clearColorFilter();
 			            	//interest.invalidate();
 		                }
 		            }
 		        });
 		    }
-		}, 170);
+		}, 600);
 	}
 
 	
@@ -505,6 +516,8 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 			
 			lookingForMore.setVisibility(View.GONE);
 			noMoreNewAttendees.setVisibility(View.VISIBLE);
+			
+			more = false;
 		}
 	}
 	private void exitNoCardMode(){
@@ -560,6 +573,31 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 					}
 					noMoreAttendee = false;
 					
+					if(bufferToggle){
+						Log.wtf("!!!!!!!", "getting buffer2");
+						if(attendeesBuffer1.size()==0 && attendeesBuffer2.size()==0){
+							for(int i=0; i<attendees.size(); i++){
+								attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
+							}
+							setListener(attendeesBuffer1);
+							//exitLoadingMode();
+						}else{
+				 			
+							for(int i=0; i<attendees.size(); i++){
+								attendeesBuffer2.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
+							}
+							read = true;
+						}
+
+					}else{
+						
+						Log.wtf("!!!!!!!", "getting buffer1");
+						for(int i=0; i<attendees.size(); i++){
+							attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
+						}
+						read = true;
+						
+					}
 					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -571,33 +609,14 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		protected void onPostExecute(Void v) {
 			
 			if(attendees.size()>0){		
-				
-				if(bufferToggle){
-					Log.wtf("!!!!!!!", "getting buffer2");
-					if(attendeesBuffer1.size()==0 && attendeesBuffer2.size()==0){
-						for(int i=0; i<attendees.size(); i++){
-							attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
-						}
-						setListener(attendeesBuffer1);
-						exitLoadingMode();
-					}else{
-			 			
-						for(int i=0; i<attendees.size(); i++){
-							attendeesBuffer2.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
-						}
-						read = true;
-					}
-
-				}else{
-					
-					Log.wtf("!!!!!!!", "getting buffer1");
-					for(int i=0; i<attendees.size(); i++){
-						attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
-					}
-					read = true;
-					
-				}
 				exitLoadingMode();
+				if(bufferToggle){
+					mCardContainer2.setVisibility(View.INVISIBLE);
+					mCardContainer2.setAdapter(adapter);
+				}else{
+					mCardContainer.setVisibility(View.INVISIBLE);
+					mCardContainer.setAdapter(adapter);
+				}
 			}
 		}
 		
@@ -663,6 +682,8 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
  
 				@Override
 	            public void onDislike() {
+
+	            	long startTime = System.nanoTime();
 	                Log.wtf("Swipeable Cards","I dislike the card");
 	                // Caution!!! current email and pid are empty, so i set them to empty string
 	                // temp.getProfile().get("email").toString()
@@ -707,6 +728,9 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	                if(bufferCounter1 >= amountPerDeck){
 	                	cleanUp();
 	                }
+	                
+	            	long endTime = System.nanoTime();
+	            	Log.wtf("Time spent: ", endTime - startTime+"");
 	            }
 	        });
 			adapter.add(attendeesBuffer.get(i));
@@ -748,34 +772,30 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	
 	private void showNewDeck(){
 		
+    	long startTime = System.nanoTime();
+    	
 		if(bufferToggle){
 			if(attendeesBuffer2 != null && attendeesBuffer2.size()!=0){
-				mCardContainer2.setAdapter(adapter);
+				//mCardContainer2.setAdapter(adapter);
+				mCardContainer2.setVisibility(View.VISIBLE);
 				deckLayout.removeView(mCardContainer2);
-				deckLayout.addView(mCardContainer2);
 				deckLayout.removeView(mCardContainer);
+				deckLayout.addView(mCardContainer2);
 				deckLayout.addView(mCardContainer);
 			}
 		}else{
 			if(attendeesBuffer1 != null && attendeesBuffer1.size()!=0){
 
-				mCardContainer.setAdapter(adapter);
+				//mCardContainer.setAdapter(adapter);
+				mCardContainer.setVisibility(View.VISIBLE);
 				deckLayout.removeView(mCardContainer);
-				deckLayout.addView(mCardContainer);
 				deckLayout.removeView(mCardContainer2);
+				deckLayout.addView(mCardContainer);
 				deckLayout.addView(mCardContainer2);
 			}
 		}
-
-			
-			/*
-			final RelativeLayout.LayoutParams params = 
-	                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 
-	                                                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-			params.addRule(RelativeLayout.BELOW, previousId);
-			
-			previousId++;*/
+    	long endTime = System.nanoTime();
+    	Log.wtf("Time spent - new dexk: ", endTime - startTime+"");
 
 	}
 	
@@ -828,12 +848,12 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		}
 		tutorialPageNum++;
 	}
-	
+	 
 	private boolean isFirstTime()
 	{
 		
 	    SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-	    boolean ranBefore = preferences.getBoolean("WHOVA", false);
+	    boolean ranBefore = preferences.getBoolean("PeopleSelectionTutorial", false);
 	    if (!ranBefore) {
 	        // first time
 	        SharedPreferences.Editor editor = preferences.edit();
@@ -841,8 +861,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	        editor.commit();
 	    }
 	    return !ranBefore;
-		//return true;
-	}
+	} 
 	
 	@Override
 	protected void onDestroy() {

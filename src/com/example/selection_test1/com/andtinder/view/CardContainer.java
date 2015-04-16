@@ -40,7 +40,6 @@ public class CardContainer extends AdapterView<ListAdapter> {
     public static final int INVALID_POINTER_ID = -1;
     private int mActivePointerId = INVALID_POINTER_ID;
     private static final double DISORDERED_MAX_ROTATION_RADIANS = Math.PI / 64;
-    private int mNumberOfCards = -1;
     private final DataSetObserver mDataSetObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
@@ -75,8 +74,6 @@ public class CardContainer extends AdapterView<ListAdapter> {
     private int mNextAdapterPosition;
     private boolean mDragging;
     
-    private ArrayList<CardModel> likes;
-    private ArrayList<CardModel> notLikes;
 
     public CardContainer(Context context) {
         super(context);
@@ -106,8 +103,6 @@ public class CardContainer extends AdapterView<ListAdapter> {
         mTouchSlop = viewConfiguration.getScaledTouchSlop();
         mGestureDetector = new GestureDetector(getContext(), new GestureListener());
         
-        likes = new ArrayList();
-        notLikes = new ArrayList();
     }
 
     private void initFromXml(AttributeSet attr) {
@@ -159,8 +154,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 			autoScroll(getContext(),person_info);
         }
         if (cardModel.getOnCardDimissedListener() != null) {
-            cardModel.getOnCardDimissedListener().onDislike();
-            likes.add(cardModel);                     
+            cardModel.getOnCardDimissedListener().onDislike();            
         }
 
     } 
@@ -201,8 +195,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 			autoScroll(getContext(),person_info);
         }
         if (cardModel.getOnCardDimissedListener() != null) {
-            cardModel.getOnCardDimissedListener().onLike();
-            likes.add(cardModel);                     
+            cardModel.getOnCardDimissedListener().onLike();               
         }
     	
     }
@@ -239,13 +232,6 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
     			autoScroll(getContext(),person_info);
             }
-        }
-        
-        // change here !!!!!!!!!!!!!!!!!!!!
-        if(getAdapter().getCount()>=2){
-            mNumberOfCards = 2;
-        }else{
-        	mNumberOfCards = getAdapter().getCount();
         }
 
         requestLayout();
@@ -356,13 +342,14 @@ public class CardContainer extends AdapterView<ListAdapter> {
         }
     }
 
+    
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-    	
     	
         if (mTopCard == null) {
             return false;
         }
+
         if (mGestureDetector.onTouchEvent(event)) {
             return true;
         }
@@ -439,7 +426,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-
+            	
                 if (!mDragging) {
                     return true;
                 }
@@ -468,6 +455,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
                     mActivePointerId = event.getPointerId(newPointerIndex);
                 }
+                
                 break;
         }
 
@@ -569,10 +557,10 @@ public class CardContainer extends AdapterView<ListAdapter> {
     
     private void autoScroll(final Context c, final ExpandableListView person_info) {
     	
-    	SharedPreferences p = c.getSharedPreferences("WHOVA", Context.MODE_PRIVATE);
+    	SharedPreferences p = c.getSharedPreferences("SCROLL", Context.MODE_PRIVATE);
     	int resultInt = p.getInt("SCROLL", 0);
 
-    	SharedPreferences.Editor editor = c.getSharedPreferences("WHOVA", Context.MODE_PRIVATE).edit();
+    	SharedPreferences.Editor editor = c.getSharedPreferences("SCROLL", Context.MODE_PRIVATE).edit();
     	switch(resultInt){
     		case 0:
         		editor.putInt("SCROLL", 1);
@@ -617,18 +605,19 @@ public class CardContainer extends AdapterView<ListAdapter> {
     private class GestureListener extends SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d("Fling", "Fling with " + velocityX + ", " + velocityY);
             final View topCard = mTopCard;
             float dx = e2.getX() - e1.getX();
             if (Math.abs(dx) > mTouchSlop &&
                     Math.abs(velocityX) > Math.abs(velocityY) &&
                     Math.abs(velocityX) > mFlingSlop * 3) {
+
+            	
                 float targetX = topCard.getX();
                 float targetY = topCard.getY();
                 long duration = 0;
 
                 boundsRect.set(0 - topCard.getWidth() - 100, 0 - topCard.getHeight() - 100, getWidth() + 100, getHeight() + 100);
-
+ 
                 while (boundsRect.contains((int) targetX, (int) targetY)) {
                     targetX += velocityX / 10;
                     targetY += velocityY / 10;
@@ -636,11 +625,12 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     
                 }
 
-                duration = Math.min(500, duration);
+                duration = Math.min(300, duration);
 
                 mTopCard = getChildAt(getChildCount() - 2);
                 CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
+            	
                 if(mTopCard != null){
                     mTopCard.setVisibility(View.VISIBLE);
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
@@ -650,19 +640,16 @@ public class CardContainer extends AdapterView<ListAdapter> {
                     final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
         			autoScroll(getContext(),person_info);
                 }
-
+               
                 if (cardModel.getOnCardDimissedListener() != null) {
                     if ( targetX > 0 ) {
-                        cardModel.getOnCardDimissedListener().onDislike();
-                        likes.add(cardModel);                     
+                        cardModel.getOnCardDimissedListener().onDislike();                 
                     } else {
                         cardModel.getOnCardDimissedListener().onLike();
-                        notLikes.add(cardModel);
                     }
                     //Log.wtf("~~~~~~~~~~~~~~~", "Like: "+likes.size()+" Not Like: "+notLikes.size());
                 }
 
-                
                 topCard.animate()
                         .setDuration(duration)
                         .alpha(.75f)
@@ -682,6 +669,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                                 onAnimationEnd(animation);
                             }
                         });
+                //mTopCard.setEnabled(true);
                 return true;
             } else
                 return false;

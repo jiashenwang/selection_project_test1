@@ -173,12 +173,12 @@ public class InteresterListAdapter extends BaseAdapter{
 	private boolean descardTutorial()
 	{
 	    SharedPreferences preferences =PreferenceManager.getDefaultSharedPreferences(mContext);
-	    boolean ranBefore = preferences.getBoolean("WHOVA", false);
+	    boolean ranBefore = preferences.getBoolean("DescardTutorial", false);
 	    
 	    if (!ranBefore) {
 	        // first time
 	        SharedPreferences.Editor editor = preferences.edit();
-	        editor.putBoolean("PeopleSelectionTutorial", true);
+	        editor.putBoolean("DescardTutorial", true);
 	        editor.commit();
 	    }
 	    return ranBefore;

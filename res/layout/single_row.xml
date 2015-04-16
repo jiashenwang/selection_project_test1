@@ -9,11 +9,12 @@
        	    android:layout_margin="10dp"               
 	        android:layout_width="60dp"
         	android:layout_height="60dp" >
-        	<ProgressBar 
+        	<ImageView 
         	    android:id="@+id/image_progress_bar"
 		        android:layout_centerInParent="true"
       		    android:layout_width="match_parent"       
 	        	android:layout_height="match_parent"
+	        	android:src="@drawable/default_profile"
 		        />
     	    <ImageView
 		        android:id="@+id/pic_in_list"
