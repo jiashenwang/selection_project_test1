@@ -19,7 +19,7 @@ public abstract class CardStackAdapter extends BaseCardStackAdapter {
 	 * performed on the deque should be synchronized on this lock.
 	 */
 	private final Object mLock = new Object();
-	private ArrayList<CardModel> mData;
+	public ArrayList<CardModel> mData;
 
 	public CardStackAdapter(Context context) {
 		mContext = context;

@@ -17,6 +17,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.example.selection_test1.R.color;
 import com.example.selection_test1.adapters.ListAdapter;
 import com.example.selection_test1.com.andtinder.model.CardModel;
+import com.example.selection_test1.com.andtinder.model.CardModel.OnCardDimissedListener;
 import com.example.selection_test1.com.andtinder.view.CardContainer;
 import com.example.selection_test1.com.andtinder.view.CardStackAdapter;
 import com.example.selection_test1.com.andtinder.view.SimpleCardStackAdapter;
@@ -73,9 +74,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class PeopleSelection extends Activity implements View.OnClickListener {
-	
-	final private int amountPerDeck = 4;
-	private int temp_counter = 0;
+
 	
 	private RelativeLayout deckLayout;
 	private CardContainer mCardContainer;
@@ -83,10 +82,12 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	private CardContainer mCardContainer_search;
 	private Button interest, not_interest;
 	SimpleCardStackAdapter adapter;
+	SimpleCardStackAdapter adapter2;
 	SimpleCardStackAdapter adapter_search;
 	private ArrayList<CardModel> currentCards;
 	private ArrayList<CardModel> attendeesBuffer1;
 	private ArrayList<CardModel> attendeesBuffer2;
+	private ArrayList<CardModel> attendeesBuffer;
 	private ArrayList<Map<String, Object>> attendees;
 	private ArrayList<Map<String, Object>> attendees_search;
 	private TextView lookingForMore, toDiscard, noMoreNewAttendees;
@@ -113,7 +114,11 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	// coach mark targets
 	private Target tLike,tDislike,tSearch,tList;
 	
-	
+	// 
+	private int total_attendees = 12;
+	private int attendees_loaded_sofar = 0;
+	private int attendees_viewed = 0;
+	private int cards_per_deck = 4;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +147,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		          case MotionEvent.ACTION_UP:
     		              // Your action here on button click
     		        	  if(noMoreSearch){
-    		        		  if(CardContainerToggle){
+    		        		  if(!bufferToggle){
     		        			  mCardContainer.notLike();
     		        		  }else{
     		        			  mCardContainer2.notLike();
@@ -175,7 +180,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		          case MotionEvent.ACTION_UP:
     		              // Your action here on button click
     		        	  if(noMoreSearch){
-    		        		  if(CardContainerToggle){
+    		        		  if(!bufferToggle){
     		        			  mCardContainer.like();
     		        		  }else{
     		        			  mCardContainer2.like();
@@ -242,7 +247,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 									Log.wtf("!!!!!!!!!","Search card liked");
 									decisionPost(""/*email*/,""/*pid*/, true);
 									noMoreSearch = true;
-									if(noMoreAttendee){
+									if(attendees_viewed == total_attendees){
 										noCardMode();
 									}
 								}
@@ -250,7 +255,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 									Log.wtf("!!!!!!!!!","Search card not liked");
 									decisionPost(""/*email*/,""/*pid*/, false);
 									noMoreSearch = true;
-									if(noMoreAttendee){
+									if(attendees_viewed == total_attendees){
 										noCardMode();
 									}
 								}
@@ -433,6 +438,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     	noMoreSearch = true;
     	
     	currentCards = new ArrayList();
+    	attendeesBuffer = new ArrayList();
         attendeesBuffer1 = new ArrayList();
         attendeesBuffer2 = new ArrayList();
         attendees = new ArrayList();
@@ -442,6 +448,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		aq = new AQuery(this.findViewById(android.R.id.content));
         r = getResources();
 		adapter = new SimpleCardStackAdapter(this);
+		adapter2 = new SimpleCardStackAdapter(this);
 		adapter_search = new SimpleCardStackAdapter(this);
 		
 		tLike = new ViewTarget(R.id.interest, this);
@@ -542,7 +549,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 		
 		@Override
 		protected void onPreExecute(){	
-			if(bufferCounter1==0 && bufferCounter2 == 0){
+			if(attendees_loaded_sofar == 0){
 				loadingMode();
 			}
 		}
@@ -571,32 +578,10 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 					for(int i=0; i<map3.size(); i++){
 						attendees.add(map3.get(i));
 					}
-					noMoreAttendee = false;
+					//noMoreAttendee = false;
 					
-					if(bufferToggle){
-						Log.wtf("!!!!!!!", "getting buffer2");
-						if(attendeesBuffer1.size()==0 && attendeesBuffer2.size()==0){
-							for(int i=0; i<attendees.size(); i++){
-								attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
-							}
-							setListener(attendeesBuffer1);
-							//exitLoadingMode();
-						}else{
-				 			
-							for(int i=0; i<attendees.size(); i++){
-								attendeesBuffer2.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
-							}
-							read = true;
-						}
-
-					}else{
-						
-						Log.wtf("!!!!!!!", "getting buffer1");
-						for(int i=0; i<attendees.size(); i++){
-							attendeesBuffer1.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
-						}
-						read = true;
-						
+					for(int i=0; i<attendees.size(); i++){
+						attendeesBuffer.add(new CardModel(attendees.get(i), getResources().getDrawable(R.drawable.picture1)));
 					}
 					
 				} catch (JSONException e) {
@@ -607,196 +592,118 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 			return null;
 		}
 		protected void onPostExecute(Void v) {
-			
-			if(attendees.size()>0){		
-				exitLoadingMode();
-				if(bufferToggle){
-					mCardContainer2.setVisibility(View.INVISIBLE);
-					mCardContainer2.setAdapter(adapter);
-				}else{
-					mCardContainer.setVisibility(View.INVISIBLE);
-					mCardContainer.setAdapter(adapter);
+			if(attendees_loaded_sofar == 0){
+				bufferToggle = false;
+				if(attendeesBuffer.size() >=2){
+					setListener(attendeesBuffer.get(0));
+					setListener(attendeesBuffer.get(1));
+					adapter.add(attendeesBuffer.get(0));
+					mCardContainer.setAdapter(adapter);		
+
+					adapter2.add(attendeesBuffer.get(1));
+					mCardContainer2.setAdapter(adapter2);
+					
+					attendeesBuffer.remove(0);
+					attendeesBuffer.remove(0);
+					
+					deckLayout.removeView(mCardContainer2);
+					deckLayout.removeView(mCardContainer);
+					deckLayout.addView(mCardContainer2);
+					deckLayout.addView(mCardContainer);
+					
+					Log.wtf("!!!!!!!!!!!!!!!", attendeesBuffer.size()+"");
 				}
+				exitLoadingMode();
 			}
+			attendees_loaded_sofar += cards_per_deck;
+			
 		}
 		
 	}
-	
-	public void setListener(final ArrayList<CardModel> attendeesBuffer){
-		for(int i=0; i<attendeesBuffer.size(); i++){
+	private void switchTDeck(){
+
+		if(!bufferToggle){
+			deckLayout.removeView(mCardContainer2);
+			deckLayout.removeView(mCardContainer);
+			deckLayout.addView(mCardContainer);
+			deckLayout.addView(mCardContainer2);
 			
-			final CardModel temp = attendeesBuffer.get(i);
+			adapter.clear();
+			setListener(attendeesBuffer.get(0));
+			adapter.add(attendeesBuffer.get(0));
+			mCardContainer.setAdapter(adapter);
+			attendeesBuffer.remove(0);
 			
-			attendeesBuffer.get(i).setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-	        	
-	            @Override
-	            public void onLike() {
-	                Log.wtf("Swipeable Cards","I like the card: ");
+			bufferToggle = true;
+			
 
-	                // Caution!!! current email and pid are empty, so i set them to empty string
-	                // temp.getProfile().get("email").toString()
-	                // temp.getProfile().get("pid").toString()
-	                decisionPost(""/*email*/,
-	                		""/*pid*/, 
-	                		true);
+			
+		}else{
+			deckLayout.removeView(mCardContainer2);
+			deckLayout.removeView(mCardContainer);
+			deckLayout.addView(mCardContainer2);
+			deckLayout.addView(mCardContainer);
+			
+			adapter2.clear();
+			setListener(attendeesBuffer.get(0));
+			adapter2.add(attendeesBuffer.get(0));
+			mCardContainer2.setAdapter(adapter2);
+			attendeesBuffer.remove(0);
+			
+			bufferToggle = false; 
 
-	                if(bufferToggle){
-	                	bufferCounter1++;
-	                	if(bufferCounter1 == amountPerDeck -1){
-	                		showNewDeck();
-	                	}
-	                	if(!read && bufferCounter1 >= (int)(amountPerDeck*0.7)){
-	                		Log.wtf("!!!!!!!!!!!!", "Like Load more");
-	                		if(temp_counter<2)
-	                			loadMore();
-	                	}
-	                	if(more && bufferCounter1 >= amountPerDeck){
-	                		if(temp_counter>=2){
-	                			noCardMode();
-	                		}else{
-		                		swicthToBuffer2();
-	                		}
-	                	}
-	                }else{
-	                	bufferCounter2++;
-	                	if(bufferCounter2 == amountPerDeck -1){
-	                		showNewDeck();
-	                	}
-	                	if(!read && bufferCounter2 >= (int)(amountPerDeck*0.7)){
-	                		if(temp_counter<2)
-	                			loadMore();
-	                	}
-	                	if(more && bufferCounter2 >= amountPerDeck){
-	                		if(temp_counter>=2){
-	                			noCardMode();
-	                		}else{
-		                		swicthToBuffer1();
-	                		}
-	                	}
-	                }
-	                if(bufferCounter1 >= amountPerDeck){
-	                	cleanUp();
-	                }
-	            }
+		}			
+		
+	}
 
- 
-				@Override
-	            public void onDislike() {
-
-	            	long startTime = System.nanoTime();
-	                Log.wtf("Swipeable Cards","I dislike the card");
-	                // Caution!!! current email and pid are empty, so i set them to empty string
-	                // temp.getProfile().get("email").toString()
-	                // temp.getProfile().get("pid").toString()
-	                decisionPost(""/*email*/,
-	                		""/*pid*/, 
-	                		false);
-	                
-	                if(bufferToggle){
-	                	bufferCounter1++;
-	                	if(bufferCounter1 == amountPerDeck -1){
-	                		showNewDeck();
-	                	}
-	                	if(!read && bufferCounter1 >= (int)(amountPerDeck*0.7)){
-	                		if(temp_counter<2)
-	                			loadMore();
-	                	}
-	                	if(more && bufferCounter1 >= amountPerDeck){
-	                		if(temp_counter>=2){
-	                			noCardMode();
-	                		}else{
-		                		swicthToBuffer2();
-	                		}
-	                	}
-	                }else{
-	                	bufferCounter2++;
-	                	if(bufferCounter2 == amountPerDeck -1){
-	                		showNewDeck();
-	                	}
-	                	if(!read && bufferCounter2 >= (int)(amountPerDeck*0.7)){
-	                		if(temp_counter<2)
-	                			loadMore();
-	                	}
-	                	if(more && bufferCounter2 >= amountPerDeck){
-	                		if(temp_counter>=2){
-	                			noCardMode();
-	                		}else{
-		                		swicthToBuffer1();
-	                		}
-	                	}
-	                }
-	                if(bufferCounter1 >= amountPerDeck){
-	                	cleanUp();
-	                }
-	                
-	            	long endTime = System.nanoTime();
-	            	Log.wtf("Time spent: ", endTime - startTime+"");
-	            }
-	        });
-			adapter.add(attendeesBuffer.get(i));
-		}
-		mCardContainer.setAdapter(adapter);
+	private void setListener(final CardModel cardModel){
+		
+    	cardModel.setOnCardDimissedListener(new OnCardDimissedListener() {
+			
+			@Override
+			public void onLike() {
+				attendees_viewed++;
+				// Caution!!! current email and pid are empty, so i set them to empty string
+				//cardModel.getProfile().get("email").toString();
+                // temp.getProfile().get("pid").toString()
+                decisionPost(""/*email*/,
+                		""/*pid*/, 
+                		true);
+                if(attendeesBuffer.size()>0){
+                	switchTDeck();
+                }
+                if(attendees_viewed == total_attendees){
+            		noCardMode();
+            	}
+                if(attendees_viewed%cards_per_deck == 1 && attendees_loaded_sofar < total_attendees){
+                	loadMore();
+                }
+			}
+			
+			@Override 
+			public void onDislike() {
+				attendees_viewed++;
+                // Caution!!! current email and pid are empty, so i set them to empty string
+                // temp.getProfile().get("email").toString()
+                // temp.getProfile().get("pid").toString()
+                decisionPost(""/*email*/,
+                		""/*pid*/, 
+                		false);
+                if(attendeesBuffer.size()>0){
+                	switchTDeck();
+                }
+                if(attendees_viewed == total_attendees){
+            		noCardMode();
+            	}
+                if(attendees_viewed%cards_per_deck == 1 && attendees_loaded_sofar < total_attendees){
+                	loadMore();
+                }
+			}
+		});
 	}
 	private void loadMore(){
 		getAllAttendees temp = new getAllAttendees(getApplicationContext(), "");
 		temp.execute();
-	}
-	private void swicthToBuffer2(){
-
-		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 2");
-		bufferToggle = false;
-		bufferCounter1 = 0;
-		attendeesBuffer1.clear();
-
-		temp_counter++;
-		read = false;
-		CardContainerToggle = false;
-		//loadingMode();	
-		
-
-	}
-	private void swicthToBuffer1(){
-
-		Log.wtf("!!!!!!!!!!!!!!!!", "Switch to buffer 1");
-		
-		bufferToggle = true;
-		bufferCounter2 = 0;
-		attendeesBuffer2.clear();
-
-		temp_counter++;
-		read = false;
-		CardContainerToggle = true;
-		//loadingMode();	
-		
-	}
-	
-	private void showNewDeck(){
-		
-    	long startTime = System.nanoTime();
-    	
-		if(bufferToggle){
-			if(attendeesBuffer2 != null && attendeesBuffer2.size()!=0){
-				//mCardContainer2.setAdapter(adapter);
-				mCardContainer2.setVisibility(View.VISIBLE);
-				deckLayout.removeView(mCardContainer2);
-				deckLayout.removeView(mCardContainer);
-				deckLayout.addView(mCardContainer2);
-				deckLayout.addView(mCardContainer);
-			}
-		}else{
-			if(attendeesBuffer1 != null && attendeesBuffer1.size()!=0){
-
-				//mCardContainer.setAdapter(adapter);
-				mCardContainer.setVisibility(View.VISIBLE);
-				deckLayout.removeView(mCardContainer);
-				deckLayout.removeView(mCardContainer2);
-				deckLayout.addView(mCardContainer);
-				deckLayout.addView(mCardContainer2);
-			}
-		}
-    	long endTime = System.nanoTime();
-    	Log.wtf("Time spent - new dexk: ", endTime - startTime+"");
-
 	}
 	
 	public void decisionPost(String email, String pid, boolean interested){

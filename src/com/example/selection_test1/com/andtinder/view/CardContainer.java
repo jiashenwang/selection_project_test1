@@ -118,7 +118,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
     public void notLike(){
 
-
+    	final CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
         final View topCard = mTopCard;
         topCard.animate()
         .setDuration(150)
@@ -132,6 +132,10 @@ public class CardContainer extends AdapterView<ListAdapter> {
             public void onAnimationEnd(Animator animation) {
                 removeViewInLayout(topCard);
                 ensureFull();
+                
+                if (cardModel.getOnCardDimissedListener() != null) {
+                    cardModel.getOnCardDimissedListener().onDislike();            
+                }
             }
 
             @Override
@@ -141,7 +145,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
         });
         mTopCard = getChildAt(getChildCount() - 2);
         
-        CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
+        
 
         if(mTopCard != null){
             mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
@@ -153,15 +157,14 @@ public class CardContainer extends AdapterView<ListAdapter> {
             final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
 			autoScroll(getContext(),person_info);
         }
-        if (cardModel.getOnCardDimissedListener() != null) {
-            cardModel.getOnCardDimissedListener().onDislike();            
-        }
+
 
     } 
 
 	public void like(){
     	
-    	
+		 final CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
+
         final View topCard = mTopCard;
         topCard.animate()
         .setDuration(150)
@@ -175,6 +178,10 @@ public class CardContainer extends AdapterView<ListAdapter> {
             public void onAnimationEnd(Animator animation) {
                 removeViewInLayout(topCard);
                 ensureFull();
+                
+                if (cardModel.getOnCardDimissedListener() != null) {
+                    cardModel.getOnCardDimissedListener().onLike();               
+                }
             }
 
             @Override 
@@ -183,8 +190,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
             }
         });
         mTopCard = getChildAt(getChildCount() - 2);
-        CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
-
+       
         if(mTopCard != null){
             mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
             mTopCard.setVisibility(View.VISIBLE);
@@ -194,9 +200,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
             final ExpandableListView person_info = (ExpandableListView)mTopCard.findViewById(R.id.person_info);
 			autoScroll(getContext(),person_info);
         }
-        if (cardModel.getOnCardDimissedListener() != null) {
-            cardModel.getOnCardDimissedListener().onLike();               
-        }
+
     	
     }
     
@@ -628,12 +632,13 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 duration = Math.min(300, duration);
 
                 mTopCard = getChildAt(getChildCount() - 2);
-                CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
+                final CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
             	
                 if(mTopCard != null){
                     mTopCard.setVisibility(View.VISIBLE);
                     mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
+                    
                     if(getChildAt(getChildCount() - 3)!=null){
                     	getChildAt(getChildCount() - 3).setVisibility(View.VISIBLE);
                     }
@@ -641,14 +646,20 @@ public class CardContainer extends AdapterView<ListAdapter> {
         			autoScroll(getContext(),person_info);
                 }
                
-                if (cardModel.getOnCardDimissedListener() != null) {
-                    if ( targetX > 0 ) {
-                        cardModel.getOnCardDimissedListener().onDislike();                 
-                    } else {
-                        cardModel.getOnCardDimissedListener().onLike();
-                    }
-                    //Log.wtf("~~~~~~~~~~~~~~~", "Like: "+likes.size()+" Not Like: "+notLikes.size());
-                }
+//                if (cardModel.getOnCardDimissedListener() != null) {
+//	                long startTime = System.nanoTime();
+//
+//                    if ( targetX > 0 ) {
+//                        cardModel.getOnCardDimissedListener().onDislike();                 
+//                    } else {
+//                        cardModel.getOnCardDimissedListener().onLike();
+//                    }
+//	    	    	long endTime = System.nanoTime();
+//	    	    	Log.wtf("Time spent: ", endTime - startTime+"");
+//                    //Log.wtf("~~~~~~~~~~~~~~~", "Like: "+likes.size()+" Not Like: "+notLikes.size());
+//                }
+                
+                final float tempX = targetX;
 
                 topCard.animate()
                         .setDuration(duration)
@@ -662,12 +673,26 @@ public class CardContainer extends AdapterView<ListAdapter> {
                             public void onAnimationEnd(Animator animation) {
                                 removeViewInLayout(topCard);
                                 ensureFull();
+
+                                if (cardModel.getOnCardDimissedListener() != null) {
+                	                long startTime = System.nanoTime();
+
+                                    if ( tempX > 0 ) {
+                                        cardModel.getOnCardDimissedListener().onDislike();                 
+                                    } else {
+                                        cardModel.getOnCardDimissedListener().onLike();
+                                    }
+                	    	    	long endTime = System.nanoTime();
+                	    	    	Log.wtf("Time spent: ", endTime - startTime+"");
+                                    //Log.wtf("~~~~~~~~~~~~~~~", "Like: "+likes.size()+" Not Like: "+notLikes.size());
+                                }
                             }
 
                             @Override
                             public void onAnimationCancel(Animator animation) {
                                 onAnimationEnd(animation);
                             }
+                            
                         });
                 //mTopCard.setEnabled(true);
                 return true;

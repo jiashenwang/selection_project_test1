@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.animation.Animation.AnimationListener;
 
 public class CardModel {
 
@@ -35,7 +36,7 @@ public class CardModel {
 	protected Map<String, Object> mProfile;
 
     private OnCardDimissedListener mOnCardDimissedListener = null;
-
+    private AnimationListener mAnimationListener = null;
     private OnClickListener mOnClickListener = null;
 
     public interface OnCardDimissedListener {
@@ -120,6 +121,9 @@ public class CardModel {
        return this.mOnCardDimissedListener;
     }
 
+    public AnimationListener getAnimationListener(){
+		return this.mAnimationListener;
+    }
 
     public void setOnClickListener( OnClickListener listener ) {
         this.mOnClickListener = listener;
