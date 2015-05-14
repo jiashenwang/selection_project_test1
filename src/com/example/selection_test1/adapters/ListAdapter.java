@@ -112,7 +112,7 @@ public class ListAdapter extends BaseAdapter{
 	}
 	private String getOrg(Map<String, Object> profile){
 		List<String>map = (List<String>) profile.get("summary");
-		if(map.size()>=1){
+		if(map!=null && map.size()>=1){
 			return map.get(0).toString();
 		}else{
 			return "";
@@ -120,7 +120,7 @@ public class ListAdapter extends BaseAdapter{
 	}
 	private String getField(Map<String, Object> profile){
 		List<String>map = (List<String>) profile.get("summary");
-		if(map.size()>=2){
+		if(map!=null && map.size()>=2){
 			return map.get(1).toString();
 		}else{
 			return "";
@@ -128,7 +128,7 @@ public class ListAdapter extends BaseAdapter{
 	}
 	private String getPlace(Map<String, Object> profile){
 		List<String>map = (List<String>) profile.get("summary");
-		if(map.size()>=3){
+		if(map!=null && map.size()>=3){
 			return map.get(2).toString();
 		}else{
 			return "";

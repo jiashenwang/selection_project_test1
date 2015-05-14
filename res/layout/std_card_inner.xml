@@ -90,8 +90,9 @@
    	    <ExpandableListView 
    	        android:id="@+id/person_info"
    	        android:layout_width="match_parent"
-   	        android:layout_height="wrap_content"
-   	        android:layout_margin="5dp"
+   	        android:layout_height="match_parent"
+   	        android:layout_margin="10dp"
+   	        android:layout_marginBottom="10dp"
    	        android:groupIndicator="@null"
 			android:background="@drawable/smart_profile_background"
    	        android:layout_below="@id/divider_title"

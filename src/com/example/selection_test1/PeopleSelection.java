@@ -1,5 +1,6 @@
 package com.example.selection_test1;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -110,6 +115,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	private RelativeLayout interesterBtn;
 	View loadingView;
 	private ListView attendeesSearchHint;
+	private TextView no_attendee_matched;
 
 	Resources r;
 	
@@ -209,6 +215,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	private void findAttendees(String query) {
 		
 		if(query.equals("")){
+			no_attendee_matched.setVisibility(View.GONE);
 			attendeesSearchHint.setVisibility(View.GONE);
 		}else{
 			Map<String, Object> params = new HashMap<String, Object>();
@@ -222,9 +229,16 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 						Map<String, Object> map2 = (Map<String, Object>) map1.get("result");
 						List<Map<String, Object>> map3 = new ArrayList();
 						map3 = (List<Map<String, Object>>) map2.get("attendees");
-						attendeesSearchHint.setVisibility(View.VISIBLE);
-						attendeesSearchHint.setAdapter(new ListAdapter(getApplicationContext(), 
-								(ArrayList<Map<String, Object>>) map3));	
+					
+						if(map3.size()>0){
+							no_attendee_matched.setVisibility(View.GONE);
+							attendeesSearchHint.setVisibility(View.VISIBLE);
+							attendeesSearchHint.setAdapter(new ListAdapter(getApplicationContext(), 
+									(ArrayList<Map<String, Object>>) map3));
+						}else{
+							no_attendee_matched.setVisibility(View.VISIBLE);
+							attendeesSearchHint.setVisibility(View.GONE);
+						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -276,6 +290,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
         noMoreNewAttendees = (TextView)findViewById(R.id.no_more_new_attendees);
         interesterBtn = (RelativeLayout) findViewById(R.id.interester_btn);
         attendeesSearchHint = (ListView)findViewById(R.id.auto_complete_attendees_search);
+        no_attendee_matched = (TextView)findViewById(R.id.text_view_no_attendee_matched);
 
     	more = true;
     	bufferToggle = true;
@@ -417,37 +432,42 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 			return null;
 		}
 		protected void onPostExecute(Void v) {
-			if(attendees_loaded_sofar == 0){
-				bufferToggle = false;
-				// if there are more than two attendees, put the first attendee in mCardContainer
-				// and the second one in mCardContainer2
-				if(attendeesBuffer.size() >=2){
-					setListener(attendeesBuffer.get(0));
-					setListener(attendeesBuffer.get(1));
-					adapter.add(attendeesBuffer.get(0));
-					mCardContainer.setAdapter(adapter);		
-
-					adapter2.add(attendeesBuffer.get(1));
-					mCardContainer2.setAdapter(adapter2);
-					
-					attendeesBuffer.remove(0);
-					attendeesBuffer.remove(0);
-					
-					// put mCardContainer on top of mCardContainer2
-					deckLayout.removeView(mCardContainer2);
-					deckLayout.removeView(mCardContainer);
-					deckLayout.addView(mCardContainer2);
-					deckLayout.addView(mCardContainer);
-				}else{
-					if(attendees_loaded_sofar == 1){
+			if(attendeesBuffer.size()==0){
+				noCardMode();
+			}else{
+				if(attendees_loaded_sofar == 0){
+					bufferToggle = false;
+					// if there are more than two attendees, put the first attendee in mCardContainer
+					// and the second one in mCardContainer2
+					if(attendeesBuffer.size() >=2){
 						setListener(attendeesBuffer.get(0));
+						setListener(attendeesBuffer.get(1));
+						adapter.add(attendeesBuffer.get(0));
 						mCardContainer.setAdapter(adapter);		
+
+						adapter2.add(attendeesBuffer.get(1));
+						mCardContainer2.setAdapter(adapter2);
+						
 						attendeesBuffer.remove(0);
+						attendeesBuffer.remove(0);
+						
+						// put mCardContainer on top of mCardContainer2
+						deckLayout.removeView(mCardContainer2);
+						deckLayout.removeView(mCardContainer);
+						deckLayout.addView(mCardContainer2);
+						deckLayout.addView(mCardContainer);
+					}else{
+						if(attendees_loaded_sofar == 1){
+							setListener(attendeesBuffer.get(0));
+							mCardContainer.setAdapter(adapter);		
+							attendeesBuffer.remove(0);
+						}
 					}
+					exitLoadingMode();
 				}
-				exitLoadingMode();
+				attendees_loaded_sofar += cards_per_deck;
 			}
-			attendees_loaded_sofar += cards_per_deck;
+
 			
 		}
 		
@@ -704,21 +724,25 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 				HashMap<String, Object> item = 
 						(HashMap<String, Object>) attendeesSearchHint.getItemAtPosition(position);
 				
-				// using fake data here 
+				// using event data here 
+				String email = "yuelu.duan@whova.com";//item.get("email").toString();
+				String event = "CSE25";
+				String pid = item.get("pid").toString();
 				Map<String, Object> params = new HashMap<String, Object>();
-				params.put("email", item.get("email"));
-				params.put("event", "cse25");
-				params.put("pid", "");
+
 				
-				aq.ajax(DATA.single_attendee_detail, params, JSONObject.class, new AjaxCallback<JSONObject>(){
+				aq.ajax("http://whova.net:6565/mobile/pipldetail2/?email="+email+
+						"&event="+event+"&pid="+pid, JSONObject.class, new AjaxCallback<JSONObject>(){
 			    	@Override  
 		            public void callback(String url, JSONObject json, AjaxStatus status) { 
+						Log.wtf("!!!!!", json.toString());
 			    		try {
 			    			noMoreSearch = false;
 			    			exitNoCardMode();
 			    			Map map1 = Utilities.toMap(json);
 							Map<String, Object> map2 = (Map<String, Object>) map1.get("result");
 							Map<String, Object> map3 = (Map<String, Object>) map2.get("profile");
+
 							CardModel searchResult = new CardModel(map3);
 							// set onlike and ondislike listener for a card
 							searchResult.setOnCardDimissedListener(new CardModel.OnCardDimissedListener(){
