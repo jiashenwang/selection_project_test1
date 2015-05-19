@@ -163,7 +163,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
 
 	public void like(){
     	
-		 final CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
+		final CardModel cardModel = (CardModel)getAdapter().getItem(getChildCount() - 1);
 
         final View topCard = mTopCard;
         topCard.animate()

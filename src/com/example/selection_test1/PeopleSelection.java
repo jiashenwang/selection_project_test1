@@ -94,6 +94,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 	 * 		b) false - using mCardContainer2
 	 * 
 	 * */
+	private int debugging = 0;
 	
 	private RelativeLayout deckLayout;
 	private CardContainer mCardContainer;
@@ -476,33 +477,40 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
 
 		if(!bufferToggle){
 			// put mCardContainer2 on top of mCardContainer
+			bufferToggle = true;
 			deckLayout.removeView(mCardContainer2);
 			deckLayout.removeView(mCardContainer);
 			deckLayout.addView(mCardContainer);
 			deckLayout.addView(mCardContainer2);
-			
-			adapter.clear();
-			setListener(attendeesBuffer.get(0));
-			adapter.add(attendeesBuffer.get(0));
-			mCardContainer.setAdapter(adapter);
-			attendeesBuffer.remove(0);
-			
-			bufferToggle = true;
+
+			if(attendeesBuffer.size()>0){
+				adapter.clear();
+				setListener(attendeesBuffer.get(0));
+				adapter.add(attendeesBuffer.get(0));
+				mCardContainer.setAdapter(adapter);
+				attendeesBuffer.remove(0);
+			}
+			debugging++;
+			Log.wtf("!!!!!!!!", debugging+" : Switch to 2");
 				
 		}else{
 			// put mCardContainer on top of mCardContainer2
+			bufferToggle = false; 
 			deckLayout.removeView(mCardContainer2);
 			deckLayout.removeView(mCardContainer);
 			deckLayout.addView(mCardContainer2);
 			deckLayout.addView(mCardContainer);
 			
-			adapter2.clear();
-			setListener(attendeesBuffer.get(0));
-			adapter2.add(attendeesBuffer.get(0));
-			mCardContainer2.setAdapter(adapter2);
-			attendeesBuffer.remove(0);
-			
-			bufferToggle = false; 
+			if(attendeesBuffer.size()>0){
+				adapter2.clear();
+				setListener(attendeesBuffer.get(0));
+				adapter2.add(attendeesBuffer.get(0));
+				mCardContainer2.setAdapter(adapter2);
+				attendeesBuffer.remove(0);
+			}
+
+			debugging++;
+			Log.wtf("!!!!!!!!", debugging+" : Switch to 1");
 
 		}			
 		
@@ -521,7 +529,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
                 decisionPost(""/*email*/,
                 		""/*pid*/, 
                 		true);
-                if(attendeesBuffer.size()>0){
+                if(attendeesBuffer.size()>=0){
                 	switchTDeck();
                 }
                 if(attendees_viewed == total_attendees){
@@ -541,7 +549,7 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
                 decisionPost(""/*email*/,
                 		""/*pid*/, 
                 		false);
-                if(attendeesBuffer.size()>0){
+                if(attendeesBuffer.size()>=0){
                 	switchTDeck();
                 }
                 if(attendees_viewed == total_attendees){
@@ -648,8 +656,9 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		        			  mCardContainer2.notLike();
     		        		  }
     		        		  
-    		        	  }else
+    		        	  }else{
     		        		  mCardContainer_search.notLike();
+    		        	  }
     		          case MotionEvent.ACTION_CANCEL: {
     		        	    // disable button for half second
   							holdButton();
@@ -682,8 +691,9 @@ public class PeopleSelection extends Activity implements View.OnClickListener {
     		        			  mCardContainer2.like();
     		        		  }
     		        	  }
-    		        	  else
+    		        	  else{
     		        		  mCardContainer_search.like();
+    		        	  }
     		             
     		          case MotionEvent.ACTION_CANCEL: {
   							holdButton();
