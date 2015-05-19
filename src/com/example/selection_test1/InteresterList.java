@@ -58,7 +58,6 @@ public class InteresterList extends Activity {
         lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				// TODO Auto-generated method stub
 				HashMap<String, Object> item =  (HashMap<String, Object>) lv.getItemAtPosition(position);				
 			    Intent intent = new Intent(InteresterList.this, PersonalProfileReview.class);
 			    intent.putExtra("PERSON", item);
